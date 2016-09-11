@@ -1,0 +1,74 @@
+\documentclass{amsml}
+
+\begin{document}
+\lecture{Homework 1}{Ke Tran}{m.k.tran@uva.nl}{April 05, 2016}
+\noindent {\footnotesize You are allowed to  discuss with your colleagues but you should write the answers in \emph{your own words}. If you discuss with others, write down the name of your collaborators on top of the first page. No points will be deducted for collaborations. If we find similarities in solutions beyond the listed collaborations we will consider it as cheating.}
+
+\noindent {\footnotesize We will not accept any late submissions under any circumstances. The solutions to the previous homework will be handed out in the class at the beginning of the next homework session. After this point, late submissions will be automatically graded zero.}
+
+\noindent {\footnotesize $\star$ denotes bonus exercise. You earn 1 point for solving each bonus exercise. All bonus points earned will be added to your total homework points.}
+
+
+\begin{problem}
+Consider two random vectors $\vt{x} \in \R^n$ and $\vt{z} \in \R^n$ having Gaussian distribution  $p(\vt{x}) = \distNorm(\vt{x} | \vt{\mu}_{\vt{x}}, \vt{\Sigma}_{\vt{x}})$ and  $p(\vt{z}) = \distNorm(\vt{z} | \vt{\mu}_{\vt{z}}, \vt{\Sigma}_{\vt{z}})$.  Consider random vector $\vt{y} = \vt{x} + \vt{z}$. Derive mean and covariance of $p(\vt{y})$.
+
+\end{problem}
+
+\begin{problem}
+Given a set of $N$ observations $\mathcal{X} = \{x_1,\dots,x_N\}$. Assume that $x_i \sim \distNorm(\mu,\sigma^2)$ where $\sigma^2$ is known and $\mu \sim \distNorm(\mu_0,\sigma_0^2)$. 
+\begin{enumerate}
+\item Write down the likelihood of the data $p(\mathcal{X}|\mu,\sigma^2)$;
+\item Write down the posterior $p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)$;
+\item Show that $p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)$ is a Gaussian distribution $\distNorm(\mu|\mu_N,\sigma_N^2)$ and find the values of $\mu_N$ and $\sigma_N^2$;
+\item Derive the maximum a posterior solution for $\mu$;
+\item Derive expressions for sequential update of $\mu_N$ and $\sigma_N^2$;
+\item Derive the same results (as in 5) starting from the posterior distribution $p(\mu|x_1,\dots,x_{N-1})$, and multiplying by the likelihood function $p(x_N |\mu) = \distNorm(x_N |\mu,\sigma^2)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Consider a $D$-dimensional Gaussian random variable $\vt{x}$ with distribution $\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$ in which the covariance $\vt{\Sigma}$ is known and for which we wish to infer the mean $\vt{\mu}$ from a set of observations $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$. 
+\begin{enumerate}
+\item Write down the likelihood of the data $p(\mathcal{X}|\vt{\mu},\vt{\Sigma})$;
+\item Given a prior distribution $p(\vt{\mu})=\distNorm(\vt{\mu}|\vt{\mu}_0,\vt{\Sigma}_0)$, find the corresponding posterior distribution $p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$.
+\item Show that the posterior $p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$ is a Gaussian distribution with mean $\vt{\mu}_N$ and covariance $\vt{\Sigma}_N$
+\item Find $\vt{\mu}_N$ and $\vt{\Sigma}_N$
+\end{enumerate}
+\end{problem}
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}
+
+\begin{enumerate}
+\item Show that the product of two Gaussians gives another (un-normalized) Gaussian
+$$
+\distNorm(\vt{x}|\vt{a},\vt{A})\distNorm(\vt{x}|\vt{b},\vt{B}) = K^{-1}\distNorm(\vt{x}|\vt{c},\vt{C})
+$$
+where $\vt{c}=\vt{C}(\vt{A}^{-1}\vt{a} + \vt{B}^{-1}\vt{b})$ and $\vt{C}=(\vt{A}^{-1}+\vt{B}^{-1})^{-1}$.
+\item Using the \emph{matrix inversion lemma}, also known as the the Woodbury, Sherman \& Morrison formula: 
+\begin{equation}
+(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1} = \vt{Z}^{-1} - \vt{Z}^{-1}\vt{U}(\vt{W}^{-1}+\vt{V}^\trans \vt{Z}^{-1}\vt{U})^{-1}\vt{V}^\trans \vt{Z}^{-1}
+\end{equation}
+Proof that $\vt{C} = (\vt{A}^{-1}+\vt{B}^{-1})^{-1}=\vt{A} - \vt{A}(\vt{A}+\vt{B})^{-1}\vt{A} = \vt{B} - \vt{B}(\vt{A}+\vt{B})^{-1}\vt{B}$
+
+\item Show that
+\begin{equation}
+K^{-1} = (2\pi)^{-D/2}|\vt{A}+\vt{B}|^{-1/2} \exp\big( -\frac{1}{2}(\vt{a}-\vt{b})^\trans (\vt{A}+\vt{B})^{-1} (\vt{a}-\vt{b})\big)
+\end{equation}
+\end{enumerate}
+\end{problem}
+%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}
+Tossing a biased coin with probability that it comes up heads is $\mu$. 
+\begin{enumerate}
+\item We toss the coin 3 times and it all comes up with heads. How likely is that in the next toss, the coin comes up with head according to MLE?
+\item Suppose that the prior $\mu \sim \text{Beta}(\mu|a,b)$. What is the probability  that the coin comes up with head in the 4th toss?
+\item Suppose that we observe $m$ times that the coin lands heads and $l$ times that it lands tails. Show that the posterior mean lies between the prior mean and $\mu_{\text{MLE}}$.
+\end{enumerate}
+\end{problem}
+
+\begin{extraproblem}
+Derive mean, covariance, and mode of multivariate Student's t-distribution.
+\end{extraproblem}
+
+\end{document}
