@@ -178,7 +178,7 @@ Proof Sketch:~~}}
    \begin{center}
    \framebox{
       \vbox{\vspace{2mm}
-    \hbox to 6.28in { {\bf Machine Learning 2 \hfill Due: #4} }
+    \hbox to 6.28in { {\bf Machine Learning 1 \hfill Due: #4} }
        \vspace{6mm}
        \hbox to 6.28in { {\Large \hfill #1  \hfill}  }
        \vspace{6mm}
