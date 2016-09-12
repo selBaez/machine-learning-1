@@ -182,7 +182,7 @@ Proof Sketch:~~}}
        \vspace{6mm}
        \hbox to 6.28in { {\Large \hfill #1  \hfill}  }
        \vspace{6mm}
-       \hbox to 6.28in { {Instructor: #2 \hfill Email: #3} }
+       \hbox to 6.28in { {Student name: #2 \hfill Student number: #3} }
       \vspace{2mm}}
    }
    \end{center}

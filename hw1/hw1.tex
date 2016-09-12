@@ -1,74 +1,130 @@
 \documentclass{../amsml}
 
 \begin{document}
-\lecture{Homework 1}{Ke Tran}{m.k.tran@uva.nl}{April 05, 2016}
-\noindent {\footnotesize You are allowed to  discuss with your colleagues but you should write the answers in \emph{your own words}. If you discuss with others, write down the name of your collaborators on top of the first page. No points will be deducted for collaborations. If we find similarities in solutions beyond the listed collaborations we will consider it as cheating.}
-
-\noindent {\footnotesize We will not accept any late submissions under any circumstances. The solutions to the previous homework will be handed out in the class at the beginning of the next homework session. After this point, late submissions will be automatically graded zero.}
-
-\noindent {\footnotesize $\star$ denotes bonus exercise. You earn 1 point for solving each bonus exercise. All bonus points earned will be added to your total homework points.}
-
+\lecture{Homework 1}{Selene Baez Santamaria}{10985417}{September 14, 2016}
 
 \begin{problem}
-Consider two random vectors $\vt{x} \in \R^n$ and $\vt{z} \in \R^n$ having Gaussian distribution  $p(\vt{x}) = \distNorm(\vt{x} | \vt{\mu}_{\vt{x}}, \vt{\Sigma}_{\vt{x}})$ and  $p(\vt{z}) = \distNorm(\vt{z} | \vt{\mu}_{\vt{z}}, \vt{\Sigma}_{\vt{z}})$.  Consider random vector $\vt{y} = \vt{x} + \vt{z}$. Derive mean and covariance of $p(\vt{y})$.
-
-\end{problem}
-
-\begin{problem}
-Given a set of $N$ observations $\mathcal{X} = \{x_1,\dots,x_N\}$. Assume that $x_i \sim \distNorm(\mu,\sigma^2)$ where $\sigma^2$ is known and $\mu \sim \distNorm(\mu_0,\sigma_0^2)$. 
+Being a student in the Netherlands, you spend all your time in the cities of Amsterdam and Rotterdam. Based on your experience, the weather in Amsterdam is much nicer: the probability that it rains when you are in Amsterdam is $0.5$, while the probability that it rains when in Rotterdam is $0.75$. Amsterdam is where you spend most of your time: at any given moment, the probability that you are in Amsterdam is $0.8$ and the probability that you are in Rotterdam is $0.2$.	
+	
 \begin{enumerate}
-\item Write down the likelihood of the data $p(\mathcal{X}|\mu,\sigma^2)$;
-\item Write down the posterior $p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)$;
-\item Show that $p(\mu|\mathcal{X},\sigma^2, \mu_0,\sigma_0^2)$ is a Gaussian distribution $\distNorm(\mu|\mu_N,\sigma_N^2)$ and find the values of $\mu_N$ and $\sigma_N^2$;
-\item Derive the maximum a posterior solution for $\mu$;
-\item Derive expressions for sequential update of $\mu_N$ and $\sigma_N^2$;
-\item Derive the same results (as in 5) starting from the posterior distribution $p(\mu|x_1,\dots,x_{N-1})$, and multiplying by the likelihood function $p(x_N |\mu) = \distNorm(x_N |\mu,\sigma^2)$.
+	\item Define the random variables and the values they can take on, both with symbols and numerically. \\
+		\emph{Solution:} \\
+			We define two random variables:
+			\begin{itemize}
+				\item The variable $L$ denotes my location. It can take values $Ams$ to symbolize I am in Amsterdam, or $Rot$ to symbolize I am in Rotterdam. Given the above information we have that  $p(L=Ams) = 0.8$ and $p(L=Rot) = 0.2$ 
+				\item The variable $R$ denotes the fact that it is raining where I am. As such, it can only be $True$ or $False$. Again, the problem description is represented as $p(R=True | L = Ams) = 0.5$ and $p(R=True | L = Rot) = 0.75$
+			\end{itemize}
+	\item What is the probability that it does not rain when you are in Rotterdam? \\
+		\emph{Solution:} \\
+			We are looking for $p(R=False | L= Rot)$. Since $R$ can only take values within $\{True, False\}$, then
+			$p(R=True | L = Rot) + p(R=False | L = Rot) = 1$ must hold. Therefore,
+			 $p(R=False | L = Rot) = 1 - p(R=True | L = Rot) = 1 - 0.75 = 0.25$
+	\item What is the probability that it rains where you are?
+		\emph{Solution:} \\
+			This time we are looking for $p(R=True)$. This represents the marginal probability of $p(R=True) = p(R=True | L = Ams) * p(L=Ams) + p(R=True | L = Rot) * p(L=Rot)$. We know all this information from the first questions, so substituting we have  $p(R=True) = 0.5 * 0.8 + 0.75 * 0.2 = 0.4 + 0.15 = 0.55$.
+	\item You wake up on the sidewalk, after a night out which you can't remember anything about but which clearly was not such a great idea. You can't recognize your surroundings, but you must be either in Amsterdam or Rotterdam. It is raining. What is the probability that you are in Amsterdam?
+		\emph{Solution:} \\
+	
 \end{enumerate}
 \end{problem}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{problem}
-Consider a $D$-dimensional Gaussian random variable $\vt{x}$ with distribution $\distNorm(\vt{x}|\vt{\mu},\vt{\Sigma})$ in which the covariance $\vt{\Sigma}$ is known and for which we wish to infer the mean $\vt{\mu}$ from a set of observations $\mathcal{X}=\{\vt{x}_1,\dotsc,\vt{x}_N\}$. 
-\begin{enumerate}
-\item Write down the likelihood of the data $p(\mathcal{X}|\vt{\mu},\vt{\Sigma})$;
-\item Given a prior distribution $p(\vt{\mu})=\distNorm(\vt{\mu}|\vt{\mu}_0,\vt{\Sigma}_0)$, find the corresponding posterior distribution $p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$.
-\item Show that the posterior $p(\vt{\mu}|\mathcal{X},\vt{\Sigma},\vt{\mu}_0,\vt{\Sigma}_0)$ is a Gaussian distribution with mean $\vt{\mu}_N$ and covariance $\vt{\Sigma}_N$
-\item Find $\vt{\mu}_N$ and $\vt{\Sigma}_N$
-\end{enumerate}
-\end{problem}
-%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%
-\begin{problem}
+In a particular city with a population of 500000, it estimated that 500 people have cancer. There is a blood test that 99 times out of 100 correctly diagnoses cancer in patients. It also, unfortunately, misdiagnoses 5\% of people that do not have cancer. With this information, answer the following questions:
 
 \begin{enumerate}
-\item Show that the product of two Gaussians gives another (un-normalized) Gaussian
-$$
-\distNorm(\vt{x}|\vt{a},\vt{A})\distNorm(\vt{x}|\vt{b},\vt{B}) = K^{-1}\distNorm(\vt{x}|\vt{c},\vt{C})
-$$
-where $\vt{c}=\vt{C}(\vt{A}^{-1}\vt{a} + \vt{B}^{-1}\vt{b})$ and $\vt{C}=(\vt{A}^{-1}+\vt{B}^{-1})^{-1}$.
-\item Using the \emph{matrix inversion lemma}, also known as the the Woodbury, Sherman \& Morrison formula: 
-\begin{equation}
-(\vt{Z}+\vt{U}\vt{W}\vt{V}^\trans)^{-1} = \vt{Z}^{-1} - \vt{Z}^{-1}\vt{U}(\vt{W}^{-1}+\vt{V}^\trans \vt{Z}^{-1}\vt{U})^{-1}\vt{V}^\trans \vt{Z}^{-1}
-\end{equation}
-Proof that $\vt{C} = (\vt{A}^{-1}+\vt{B}^{-1})^{-1}=\vt{A} - \vt{A}(\vt{A}+\vt{B})^{-1}\vt{A} = \vt{B} - \vt{B}(\vt{A}+\vt{B})^{-1}\vt{B}$
+	\item What is p(cancer) and p(not cancer)?
+	\item If a patient takes the blood test and it returns positive, what is the probability the patient has cancer?
+	\item What are some of the assumptions we are implicitly making when answering this question?
+		%the ration on the population equals the probability. Frequency of seen reflects strength of belief
+		% we assume everyone who takes the test is independent from each other, although there might be some cofound variables
+		% people just take a blood test once
 
-\item Show that
-\begin{equation}
-K^{-1} = (2\pi)^{-D/2}|\vt{A}+\vt{B}|^{-1/2} \exp\big( -\frac{1}{2}(\vt{a}-\vt{b})^\trans (\vt{A}+\vt{B})^{-1} (\vt{a}-\vt{b})\big)
-\end{equation}
-\end{enumerate}
-\end{problem}
-%%%%%%%%%%%%%%%%%%%%%%
-\begin{problem}
-Tossing a biased coin with probability that it comes up heads is $\mu$. 
-\begin{enumerate}
-\item We toss the coin 3 times and it all comes up with heads. How likely is that in the next toss, the coin comes up with head according to MLE?
-\item Suppose that the prior $\mu \sim \text{Beta}(\mu|a,b)$. What is the probability  that the coin comes up with head in the 4th toss?
-\item Suppose that we observe $m$ times that the coin lands heads and $l$ times that it lands tails. Show that the posterior mean lies between the prior mean and $\mu_{\text{MLE}}$.
 \end{enumerate}
 \end{problem}
 
-\begin{extraproblem}
-Derive mean, covariance, and mode of multivariate Student's t-distribution.
-\end{extraproblem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem} %toy question to learn how to write. Do not overthink
+For this question you will write the expression for the posterior parameter distribution for a simple data problem. Assume we observe N univariate data points fx1; x2; : : : ; xNg. Further, we assume that they are generated by a Gaussian distribution with known variance 2, but unknown mean . Assume a prior Gaussian distribution over the unknown mean, i.e. p() = N(j0; 2 0). When answering these questions, use N(ajb; c2) to indicate a Gaussian (normal) distribution over a with mean b and variance c2.
+
+\begin{enumerate}
+	\item Write down the general expression for a posterior distribution, using  for the parameter, D for the data. Indicate the prior, likelihood, evidence, and posterior.
+		% prior over mu
+		% posterior is p(theta | data)
+		% p(theta| data) * p(theta)
+		% do not write anyhting like p(theta)
+		%only write bayes formula. p of somehting is something
+		
+	\item Write the posterior for this particular example. You do not need an
+	analytic solution.
+		% p(theta) = P(mu)
+		% we do not have p(D) so we marginalize as integral of data given parameters * p(parameters) over all parameters
+		% substitute with gaussian distributions instead of p of something
+		% if prior is gaussian then posterior is gaussian
+
+\end{enumerate}
+\end{problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+Let A 
+$=\begin{bmatrix}
+3 & 5 \\ 
+2 & 3
+\end{bmatrix}$
+and b $=\begin{bmatrix} 9 \\ 5 \end{bmatrix}$
+
+\begin{enumerate}
+	\item Compute Ab
+	\item Compute bTA
+	\item What is the vector c for which Ac = b
+		%inverse or linear system of equations
+	\item What is A1?
+	\item Verify that A1b = c. Show that this must be the case.
+		%definition of inverse
+
+\end{enumerate}
+\end{problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+Find the gradient of the following functions
+ 
+\begin{enumerate}
+	\item x2 + 2x + 3
+	\item (2x3 + 1)2
+
+\end{enumerate}
+
+Find the partial derivative of the following functions with respect to x,y, z
+
+\begin{enumerate}
+	\item f(x; y; z) = (x + 2y)2 sin(xy)
+	\item f(x; y; z) = 2 log(x + y2 - z)
+	\item f(x; y; z) = exp (x cos(y + z))
+\end{enumerate}
+\end{problem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+The following questions are good practice in manipulating vectors and matrices and they are very important for solving for posterior distributions.
+Given the following expression:
+(x )T 1 (x ) + (0)T S1 (0) 
+where x, , 0 are vectors and 1 and S1 are symmetric, invertible ma trices.
+Answer the following questions:
+
+\begin{itemize}
+	\item Expand the expression and gather terms.
+		% Mtranspose = M because symetric 
+	\item Collect all the terms that depend on  and those that do not.
+	\item Take the derivative with respect to , set to 0, and solve for . %page 697 in book for derivatives and use matrix inverse for solving to 0 (say we can do it because it?s invertible)
+\end{itemize}
+
+\end{problem}
 
 \end{document}
