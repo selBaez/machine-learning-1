@@ -11,19 +11,58 @@ Being a student in the Netherlands, you spend all your time in the cities of Ams
 		\emph{Solution:} \\
 			We define two random variables:
 			\begin{itemize}
-				\item The variable $L$ denotes my location. It can take values $Ams$ to symbolize I am in Amsterdam, or $Rot$ to symbolize I am in Rotterdam. Given the above information we have that  $p(L=Ams) = 0.8$ and $p(L=Rot) = 0.2$ 
-				\item The variable $R$ denotes the fact that it is raining where I am. As such, it can only be $True$ or $False$. Again, the problem description is represented as $p(R=True | L = Ams) = 0.5$ and $p(R=True | L = Rot) = 0.75$
+				\item The variable $L$ denotes my location. It can take values $Ams$ to symbolize I am in Amsterdam, or $Rot$ to symbolize I am in Rotterdam. Given the above information we have that 
+				\begin{equation} \label{eq:pOfAms}
+					p(L=Ams) = 0.8
+				\end{equation}  				
+				\begin{equation} \label{eq:pOfRot}
+					p(L=Rot) = 0.2
+				\end{equation}
+				\item The variable $R$ denotes the fact that it is raining where I am. As such, it can only be $True$ or $False$. Again, the problem description is represented as 
+				\begin{equation} \label{eq: pOfRainAms}
+					p(R=True | L = Ams) = 0.5
+				\end{equation}
+				\begin{equation} \label{eq: pOfRainRot}
+					p(R=True | L = Rot) = 0.75
+				\end{equation}
 			\end{itemize}
+			
 	\item What is the probability that it does not rain when you are in Rotterdam? \\
 		\emph{Solution:} \\
 			We are looking for $p(R=False | L= Rot)$. Since $R$ can only take values within $\{True, False\}$, then
-			$p(R=True | L = Rot) + p(R=False | L = Rot) = 1$ must hold. Therefore,
-			 $p(R=False | L = Rot) = 1 - p(R=True | L = Rot) = 1 - 0.75 = 0.25$
-	\item What is the probability that it rains where you are?
+			\begin{displaymath}
+				p(R=True | L = Rot) + p(R=False | L = Rot) = 1
+			\end{displaymath}
+			must hold. Therefore,
+			\begin{displaymath}
+				p(R=False | L = Rot) = 1 - p(R=True | L = Rot) = 1 - 0.75 = 0.25
+			\end{displaymath}
+			 
+	\item What is the probability that it rains where you are? \\
 		\emph{Solution:} \\
-			This time we are looking for $p(R=True)$. This represents the marginal probability of $p(R=True) = p(R=True | L = Ams) * p(L=Ams) + p(R=True | L = Rot) * p(L=Rot)$. We know all this information from the first questions, so substituting we have  $p(R=True) = 0.5 * 0.8 + 0.75 * 0.2 = 0.4 + 0.15 = 0.55$.
-	\item You wake up on the sidewalk, after a night out which you can't remember anything about but which clearly was not such a great idea. You can't recognize your surroundings, but you must be either in Amsterdam or Rotterdam. It is raining. What is the probability that you are in Amsterdam?
+			This time we are looking for $p(R=True)$. This represents the marginal probability of
+			\begin{displaymath}
+				p(R=True) = p(R=True | L = Ams) * p(L=Ams) + p(R=True | L = Rot) * p(L=Rot)
+			\end{displaymath}
+			Substituting from Equation \ref{eq: pOfRainAms}, Equation \ref{eq:pOfAms}, Equation \ref{eq: pOfRainRot} and Equation \ref{eq:pOfRot}, we have
+			\begin{equation} \label{eq: pOfRain}
+				p(R=True) = 0.5 * 0.8 + 0.75 * 0.2 = 0.4 + 0.15 = 0.55
+			\end{equation}
+			  
+	\item You wake up on the sidewalk, after a night out which you can't remember anything about but which clearly was not such a great idea. You can't recognize your surroundings, but you must be either in Amsterdam or Rotterdam. It is raining. What is the probability that you are in Amsterdam? \\
 		\emph{Solution:} \\
+			We would like to find $p(L= Ams | R=True)$. According to Bayes Theorem we know that
+			\begin{equation} \label{eq: Bayes Theorem}
+				p(A=a | B=b) = \frac{p(B=b | A=a) * p(A=a)}{p(B=b)}
+			\end{equation} 
+			Substituting Equation \ref{eq: pOfRainAms}, Equation \ref{eq:pOfAms} and Equation \ref{eq: pOfRain} we get 
+			\begin{displaymath}
+				\begin{split}
+					p(L=Ams | R=True)& = \frac{p(R=True | L=Ams) * p(L=Ams)}{p(R=True)} \\
+					& = \frac{0.5 * 0.8}{0.55} = \frac{0.4}{0.55} \\
+					& = 0.7272727 \\
+				\end{split}
+			\end{displaymath}
 	
 \end{enumerate}
 \end{problem}
@@ -31,15 +70,53 @@ Being a student in the Netherlands, you spend all your time in the cities of Ams
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{problem}
-In a particular city with a population of 500000, it estimated that 500 people have cancer. There is a blood test that 99 times out of 100 correctly diagnoses cancer in patients. It also, unfortunately, misdiagnoses 5\% of people that do not have cancer. With this information, answer the following questions:
+In a particular city with a population of 500000, it estimated that 500 people have cancer. There is a blood test that 99 times out of 100 correctly diagnoses cancer in patients. It also, unfortunately, misdiagnoses 5\% of people that do not have cancer. 
+
+With this information, answer the following questions:
 
 \begin{enumerate}
-	\item What is p(cancer) and p(not cancer)?
-	\item If a patient takes the blood test and it returns positive, what is the probability the patient has cancer?
+	\item What is $p(cancer)$ and $p(not cancer)$? \\
+		\emph{Solution:} \\
+			Taking a frequentist approach, we interpret the probability of having cancer as the ratio of people having cancer in the population. Using the given information about the population we calculate $p(CANCER = True)$, 
+				\begin{equation}\label{eq: pCancer}
+					p(CANCER = True) = \frac{cancerPopulation}{totalPopulation} = \frac{500}{500,000} = 0.001
+				\end{equation} 
+			Since the variable $CANCER$ may only have values in $\{True, False\}$, we calculate the complementary probability as 
+				\begin{equation} \label{eq: pNotCancer}
+					p(CANCER = False) = 1 - p(CANCER = True) = 1 - 0.001 = 0.999
+				\end{equation}
+				
+	\item If a patient takes the blood test and it returns positive, what is the probability the patient has cancer? \\
+		\emph{Solution:} \\
+			We define a new variable $TEST$ to define the result of the test, which has range $\{Pos, Neg\}$. Therefore, we want to know $p(CANCER = True | TEST = Pos)$. \\
+			To do so, first we calculate the prior probabilities $p(TEST = Pos | CANCER = True)$ and $p(TEST = Pos | CANCER = False)$ from the problem description:
+			\begin{equation} \label{positiveGivenCancer}
+				p(TEST = Pos | CANCER = True) = \frac{99}{100} = 0.99
+			\end{equation}
+			\begin{equation} \label{positiveGivenNotCancer}
+				p(TEST = Pos | CANCER = False) = 0.05
+			\end{equation}
+			Next we calculate the evidence, meaning the marginal probability of $p(TEST = Pos)$. Using Equation \ref{positiveGivenCancer}, Equation \ref{eq: pCancer}, Equation \ref{positiveGivenNotCancer} and Equation \ref{eq: pNotCancer}
+			\begin{equation}
+				\begin{split}
+					p(TEST = Pos) \\
+					& = p(TEST = Pos | CANCER = True) * p(CANCER = True) \\
+					& + p(TEST = Pos | CANCER = False) * p(CANCER = False) \\
+					& =  0.99 * 0.001 + 0.05 * 0.999 = 0.05094
+				\end{split}
+			\end{equation}
+			Following Bayes Theorem in Equation \ref{eq: Bayes Theorem}, we have 
+			\begin{equation}
+				\begin{split}
+					p(CANCER = True | TEST = Pos) \\
+					& = \frac{p(TEST = Pos | CANCER = True) * p(CANCER = True)}{p(TEST = Pos)} \\
+					& = \frac{0.99 * 0.001}{.5094} = 0.1943
+				\end{split}
+			\end{equation}
+			
 	\item What are some of the assumptions we are implicitly making when answering this question?
-		%the ration on the population equals the probability. Frequency of seen reflects strength of belief
-		% we assume everyone who takes the test is independent from each other, although there might be some cofound variables
-		% people just take a blood test once
+		\emph{Solution:} \\
+			We assume that everyone in the population (or at least a representative sample of the population) will take the test. However, the patients taking a blood test might have already presented some symptoms that hint to the fact that they might have cancer. Therefore, the ratio of patients with cancer within the test takers is not the same as the ratio in the total population. 
 
 \end{enumerate}
 \end{problem}
@@ -47,22 +124,40 @@ In a particular city with a population of 500000, it estimated that 500 people h
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{problem} %toy question to learn how to write. Do not overthink
-For this question you will write the expression for the posterior parameter distribution for a simple data problem. Assume we observe N univariate data points fx1; x2; : : : ; xNg. Further, we assume that they are generated by a Gaussian distribution with known variance 2, but unknown mean . Assume a prior Gaussian distribution over the unknown mean, i.e. p() = N(j0; 2 0). When answering these questions, use N(ajb; c2) to indicate a Gaussian (normal) distribution over a with mean b and variance c2.
+For this question you will write the expression for the posterior parameter distribution for a simple data problem. Assume we observe $N$ univariate data points $\{x_1; x_2; : : : ; x_N\}$. Further, we assume that they are generated by a Gaussian distribution with known variance $\sigma^2$, but unknown mean $\mu$. Assume a prior Gaussian distribution over the unknown mean, i.e. $p(\mu) = \distNorm(\mu | \mu_0 , \sigma_0^2)$. When answering these questions, use $\distNorm(a | b, c^2)$ to indicate a Gaussian (normal) distribution over $a$ with mean $b$ and variance $c^2$.
 
 \begin{enumerate}
-	\item Write down the general expression for a posterior distribution, using  for the parameter, D for the data. Indicate the prior, likelihood, evidence, and posterior.
-		% prior over mu
-		% posterior is p(theta | data)
-		% p(theta| data) * p(theta)
-		% do not write anyhting like p(theta)
-		%only write bayes formula. p of somehting is something
+	\item Write down the general expression for a posterior distribution, using  for the parameter $\theta$, $D$ for the data. Indicate the prior, likelihood, evidence, and posterior. \\
+		\emph{Solution: }  \\
+			A posterior distribution is usually written as the Bayes Theorem states in Equation \ref{eq: Bayes Theorem}. Using $\theta$ and $D$ we get:
+			\begin{equation} \label{eq: posteriorDist}
+			p( \theta | D ) = \frac{p( D | \theta ) * p( \theta)}{p(D)}
+			\end{equation}
+			where 
+				$p( \theta | D )$ is the \textbf{posterior} \\
+				$p( D | \theta )$ is the \textbf{likelihood} \\ 
+				$p( \theta)$ is the \textbf{prior} \\
+				$p(D)$ is the \textbf{evidence} \\ 
+			Sometimes, when $p(D)$ is not known we can rewrite it as a marginalization of a continuous variable. Therefore:
+			\begin{equation} \label{eq: contPosteriorDist}
+			p( \theta | D ) = \frac{p( D | \theta ) * p( \theta)}{\int_{\theta_0 = \theta } p(D | \theta_0) * p(\theta_0)}
+			\end{equation}
+
 		
-	\item Write the posterior for this particular example. You do not need an
-	analytic solution.
-		% p(theta) = P(mu)
-		% we do not have p(D) so we marginalize as integral of data given parameters * p(parameters) over all parameters
-		% substitute with gaussian distributions instead of p of something
-		% if prior is gaussian then posterior is gaussian
+	\item Write the posterior for this particular example. You do not need an analytic solution. \\
+		\emph{Solution: }  \\
+			Taking Equation \ref{eq: contPosteriorDist}, and substituting the particular Normal distributions given in this example, we have: \\
+				$p( \theta | D ) = p(\mu | D)$ \\
+				$p( D | \theta ) = p(D | \mu) = \prod_{n=1}^{N} \distNorm(x_n | \mu , \sigma^2)$  \\ 
+				$p(\theta) = p(\mu) = \distNorm(\mu | \mu_0 , \sigma_0^2)$  \\
+				$p(D) = \int_{\mu }\distNorm(\mu | \mu_0 , \sigma_0^2) * \prod_{n=1}^{N} \distNorm(x_n | \mu , \sigma^2) $ \\ 
+			\begin{equation}
+				\begin{split}
+					p( \theta | D ) & = \frac{p( D | \theta ) * p( \theta)}{\int_{\theta_0 = \theta } p(D | \theta_0) * p(\theta_0)} \\
+					& = \frac{ \distNorm(\mu | \mu_0 , \sigma_0^2) * \prod_{n=1}^{N} \distNorm(x_n | \mu , \sigma^2}{\int_{\mu }\distNorm(\mu | \mu_0 , \sigma_0^2) * \prod_{n=1}^{N} \distNorm(x_n | \mu , \sigma^2)}
+				\end{split}
+			\end{equation}
+			As a final comment, we can guarantee that the posterior will be a Gaussian given that the prior is Gaussian as well. 
 
 \end{enumerate}
 \end{problem}
@@ -78,13 +173,74 @@ $=\begin{bmatrix}
 and b $=\begin{bmatrix} 9 \\ 5 \end{bmatrix}$
 
 \begin{enumerate}
-	\item Compute Ab
-	\item Compute bTA
-	\item What is the vector c for which Ac = b
+	\item Compute $Ab$ \\
+		\emph{Solution: }  \\
+			$Ab = \begin{bmatrix}  3 & 5 \\ 2 & 3 \end{bmatrix} \begin{bmatrix} 9 \\ 5 \end{bmatrix} = \begin{bmatrix} 3 * 9 + 5 * 5 \\ 2 * 9 + 3 * 5 \end{bmatrix} = \begin{bmatrix} 27+ 25 \\ 18  + 15  \end{bmatrix} = \begin{bmatrix} 52 \\ 33 \end{bmatrix}$ 
+			
+	\item Compute $b^T A$ \\
+		\emph{Solution: }  \\
+			$b^TA = \begin{bmatrix} 9 & 5 \end{bmatrix} * \begin{bmatrix}  3 & 5 \\ 2 & 3 \end{bmatrix} = \begin{bmatrix} 9*3 + 5*2 & 9*5  + 5*3 \end{bmatrix} = \begin{bmatrix} 37 & 60 \end{bmatrix}$
+			
+	\item What is the vector $c$ for which $Ac = b$ \\
+		\emph{Solution: }  \\
 		%inverse or linear system of equations
-	\item What is A1?
-	\item Verify that A1b = c. Show that this must be the case.
+		%TODO modify a bit
+			The vector $c$ can be found by solving a linear system of equations: \\
+			\begin{equation} \label{eq: systemOfEq}
+				\begin{cases}3 c_1 + 5 c_2 = 9 \\ 2 c_1 + 3 c_2 = 5 \end{cases}
+			\end{equation}
+			
+			we find the value for $c_1$ from the first sub-equation in \ref{eq: systemOfEq}
+			
+			\begin{equation}
+				c_1 = 3 - \frac{5}{3} c_2  
+			\end{equation}
+			
+			Next, we take this value and substitute in the second sub-equation of \ref{eq: systemOfEq}. 
+			
+			\begin{align*}   
+				& 2 \cdot ( 3 - \frac{5}{3} \cdot c_2) + 5 \cdot c_2 = 5  \\ 
+				& 6 - \frac{10}{3} \cdot c_2 + 3 \cdot c_2 = 5  \\ 
+				& 18 - 10 \cdot c_2 + 9 \cdot c_2 = 15 \\
+				& c_2 = -3 
+			\end{align*} 
+			
+			This helps us find $c_1$ 
+				\begin{equation}
+					c_1 = 3 - \frac{5}{3} c_2 = 3 - \frac{5}{3} * (-3) = 3 - 5 = -2
+				\end{equation} 
+				
+			Finally, we state that 
+				\begin{equation} \label{eq: cValues}
+					c = \begin{bmatrix} -2 & 3 \end{bmatrix}
+				\end{equation} 
+			
+	\item What is $A^{-1}$? \\
+		\emph{Solution: }  \\
+			We know that the inverse of a 2x2 matrix can be found with the following formula: \\
+			\begin{equation} \label{eq: 2x2Inverse}
+				A^{-1} = \frac{1}{det(A)}\begin{bmatrix}a_{22} &-a_{12} \\ -a_{21} & a_{11}\end{bmatrix}
+			\end{equation}
+			
+			where $det(A) = \mid a_{11} \cdot a_{22} - a_{12} \cdot a_{21} \mid $
+			
+			Using Equation \ref{eq: 2x2Inverse} for the given matrix $A$, we get:
+			\begin{equation} \label{eq: aInverse}
+				A^{-1} = \frac{1}{3\cdot 3 - 5\cdot 2}
+			\begin{bmatrix}3 & -5  \\ -2 & 3 \end{bmatrix} = 
+			\begin{bmatrix} -3& 5\\2&-3 \end{bmatrix}
+			\end{equation}
+			
+	\item Verify that $A^{-1}b = c$. Show that this must be the case. \\
+		\emph{Solution: }  \\
 		%definition of inverse
+			We substitute the values in \ref{eq: cValues} and \ref{eq: aInverse}
+			\begin{equation}
+				A^{-1}b = \begin{bmatrix} -3 & -5  \\ 2 & -3 \end{bmatrix} * 
+				\begin{bmatrix} 9 \\ 5 \end{bmatrix} = 
+				\begin{bmatrix} -3 * 9 + 5 * 5 \\ 2 * 9  + 5 * (-3) \end{bmatrix} =  \begin{bmatrix}-2   \\ 3 \end{bmatrix} = c
+			\end{equation} 
+			This makes sense because the inverse matrix method is equivalent to solving a linear system of equations, as we did before. 
 
 \end{enumerate}
 \end{problem}
@@ -95,17 +251,80 @@ and b $=\begin{bmatrix} 9 \\ 5 \end{bmatrix}$
 Find the gradient of the following functions
  
 \begin{enumerate}
-	\item x2 + 2x + 3
-	\item (2x3 + 1)2
+	\item $x^2 + 2x +3$ \\
+		\emph{Solution: }  \\
+			$(x^2 + 2x + 3){'} = 2x +2$ 
+	\item $(2x^3 + 1)^2$ \\
+		\emph{Solution: }  \\
+			\begin{equation} 
+				\begin{split}
+					{(2x^3+1)^2}^{'} & = 2(2x^3+1)(2x^3+1)^{'}  \\ 
+					& = (4x^3 + 2)(3 \cdot 2 x^2) \\ 
+					& = 4x^3 6x^2 + 2 \cdot 6x^2 = 24 x^5 + 12 x^2 
+				\end{split}
+			\end{equation} 
 
 \end{enumerate}
 
 Find the partial derivative of the following functions with respect to x,y, z
 
 \begin{enumerate}
-	\item f(x; y; z) = (x + 2y)2 sin(xy)
-	\item f(x; y; z) = 2 log(x + y2 - z)
-	\item f(x; y; z) = exp (x cos(y + z))
+	\item $f(x,y,z) = (x+2y)^2 sin(xy)$ \\
+		\emph{Solution: }  \\
+			Partial derivative with respect to $x$. \\
+			\begin{align}
+				\frac{\partial f}{\partial x} &= 2(x + 2y) \frac{\partial(x + 2y)}{\partial x}*\sin(xy) + (x + 2y)^2 \frac{\partial \sin(xy)}{\partial x}\\
+				&= 2(x + 2y)\sin(xy) + y(x + 2y)^2 \cos(xy)
+			\end{align}
+			
+			Partial derivative with respect to $y$.
+			\begin{align}
+				\frac{\partial f}{\partial y} &= 2(x + 2y) \frac{\partial(x + 2y)}{\partial y}*\sin(xy) + (x + 2y)^2 \frac{\partial \sin(xy)}{\partial x}\\
+				&= 4(x + 2y)\sin(xy) + x(x + 2y)^2 \cos(xy)
+			\end{align}
+			
+			Partial derivative with respect to $z$. \\
+			\begin{align}
+				\frac{\partial f}{\partial z } = 0
+			\end{align}
+			
+	\item $f(x,y,z) =  2\log(x+y^2-z)$ \\
+		\emph{Solution: }  \\
+			Partial derivative with respect to $x$. \\
+			\begin{align}
+				\frac{\partial f}{\partial x} = \frac{2}{x+y^2-z}  \frac{\partial(x+y^2-z)}{\partial x} &=  \frac{2}{x+y^2-z}
+			\end{align}
+			
+			Partial derivative with respect to $y$. \\
+			\begin{align}
+				\frac{\partial f}{\partial y} = \frac{2}{x+y^2-z}  \frac{\partial(x+y^2-z)}{\partial y} =  \frac{2*2y}{x+y^2-z}
+				&= \frac{4y}{x + y^2 - z}
+			\end{align}
+			
+			Partial derivative with respect to $z$.\\
+			\begin{align}
+				\frac{\partial f}{\partial z } = \frac{2 * -1}{x + y^2 - z}
+			\end{align}
+			
+	\item $f(x,y,z) = \exp(x\cos(y+z))$ \\
+		\emph{Solution: }  \\
+			Partial derivative with respect to $x$. \\
+			\begin{align}
+				\frac{\partial f}{\partial x} = \exp(x\cos(y+z)) \frac{\partial(x \cos(y + z))}{\partial x}&=  \exp(x\cos(y+z)) \cos(y+z)
+			\end{align}
+			
+			Partial derivative with respect to $y$. \\
+			\begin{align}
+				\frac{\partial f}{\partial y} = \exp(x\cos(y+z)) \frac{\partial(x \cos(y + z))}{\partial y}&=  \exp(x\cos(y+z)) [x(\sin(y + z))\frac{\partial (y+z)}{\partial y}] \\
+				&= \exp(x\cos(y+z)) x * \sin(y+z)*1
+			\end{align}
+			
+			Partial derivative with respect to $z$. \\
+			\begin{align}
+				\frac{\partial f}{\partial z} = \exp(x\cos(y+z)) \frac{\partial(x \cos(y + z))}{\partial z}&=  \exp(x\cos(y+z)) [-x(\sin(y + z))\frac{\partial (y+z)}{\partial z}] \\
+				&= \exp(x\cos(y+z)) (-x * \sin(y+z))
+			\end{align}
+		
 \end{enumerate}
 \end{problem}
 
