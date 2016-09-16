@@ -333,15 +333,80 @@ Find the partial derivative of the following functions with respect to x,y, z
 \begin{problem}
 The following questions are good practice in manipulating vectors and matrices and they are very important for solving for posterior distributions.
 Given the following expression:
-(x )T 1 (x ) + (0)T S1 (0) 
-where x, , 0 are vectors and 1 and S1 are symmetric, invertible ma trices.
+$(x - \mu)^T  \Sigma^{-1}(x - \mu) + (\mu - \mu_0)^T S^{-1}(\mu - \mu_0)$ 
+where $x, \mu , \mu_0$ are vectors and $\sigma^{-1}$ and $S^{-1}$ are symmetric, invertible matrices.
 Answer the following questions:
 
 \begin{itemize}
-	\item Expand the expression and gather terms.
-		% Mtranspose = M because symetric 
-	\item Collect all the terms that depend on  and those that do not.
-	\item Take the derivative with respect to , set to 0, and solve for . %page 697 in book for derivatives and use matrix inverse for solving to 0 (say we can do it because it?s invertible)
+	\item Expand the expression and gather terms. \\
+		\emph{Solution: }  \\
+			% Mtranspose = M because symetric 
+			\begin{equation} 
+				\begin{split}
+					(x-\mu)^T\Sigma^{-1}(x-\mu) + (\mu - \mu_0)^T S^{-1}(\mu - 	\mu_0))\\
+					& = x^T \Sigma^{-1} x - x^T \Sigma^{-1} \mu - \mu ^ T 			\Sigma^{-1} x + \mu ^ T \Sigma^{-1} \mu \\
+					& + \mu ^ T S^{-1} \mu - \mu^T S^{-1} \mu_0 - \mu_0^T S^{-1} 		\mu + \mu_0 ^ T S^{-1} \mu_0
+				\end{split}
+			\end{equation} \\
+			$S^{-1},\Sigma^{-1}$ are symmetric and invertible matrices with following properties:\\
+			
+			$\mu^T \Sigma^{-1}x = x^T\Sigma^{-1}\mu$  \\ 
+			and   \\
+			$\mu_0^T S^{-1}\mu = \mu^T S^{-1}\mu_0$ \\ 
+			
+			Given these 2 properties we can rewrite the above as: \\
+			\begin{equation}
+				\begin{split}
+					x^T \Sigma^{-1} x - x ^ T \Sigma^{-1} \mu - \mu ^ T \Sigma^{-1} x + \mu ^ T \Sigma^{-1} \mu + \mu^T S^{-1} \mu - \mu ^ T S^{-1} \mu_0 - \mu_0^T S^{-1} \mu + \mu_0^T S^{-1} \mu_0 \\
+					= x^T \Sigma^{-1} x + \mu^T \Sigma^{-1} \mu - 2 \mu^T \Sigma^{-1} x + \mu^T S^{-1} \mu + \mu_0^T S^{-1}x \mu_0 - 2 \mu^T S^{-1} \mu_0
+				\end{split}
+			\end{equation} \\
+			
+	\item Collect all the terms that depend on $\mu$ and those that do not. \\
+		\emph{Solution: }  \\
+			\begin{equation}
+				\begin{split}
+				x^T \Sigma^{-1} x + \mu^T \Sigma^{-1} \mu - 2 \mu^T \Sigma^{-1} x + \mu^T S^{-1} \mu + \mu_0^T S^{-1}x \mu_0 - 2 \mu^T S^{-1} \mu_0 \\
+				= \mu^T (\Sigma^{-1} + S^{-1}) \mu - 2 \mu^T(\Sigma^{-1}x + S^{-1}\mu_0) + x^T \Sigma^{-1}x + \mu_0^T S^{-1} \mu_0  
+				\end{split}
+			\end{equation}
+		
+	\item Take the derivative with respect to $\mu$, set to 0, and solve for $\mu$. \\
+		\emph{Solution: }  \\
+		 %page 697 in book for derivatives and use matrix inverse for solving to 0 (say we can do it because it?s invertible)
+			 \begin{equation}
+				 \frac{\partial (\mu^T (\Sigma^{-1} + S^{-1}) \mu - 2 \mu^T(\Sigma^{-1}x + S^{-1}\mu_0) + x^T \Sigma^{-1}x + \mu_0^T S^{-1} \mu_0)}{\partial \mu} = 0 
+			 \end{equation}
+			 
+			 Since the last two terms do not depend on $\mu$, we can set their derivative to $0$ and discard them.\\
+			 \begin{equation}
+				 \frac{\partial (\mu^T (\Sigma^{-1} + S^{-1}) \mu - 2 \mu^T(\Sigma^{-1}x + S^{-1}\mu_0)}{\partial \mu} = 0 
+			 \end{equation}
+			 
+			 \begin{equation}
+				 (\Sigma^{-1} + S^{-1}) \mu + (\mu^T (\Sigma^{-1} + S^{-1}))^T - 2(\Sigma^{-1} x + S^{-1} \mu_0) = 0
+			 \end{equation}
+			 
+			 \begin{equation}
+				 (\Sigma^{-1} + S^{-1}) \mu + (\Sigma^{-1} + S^{-1}) \mu - 2(\Sigma^{-1} x + S^{-1} \mu_0) = 0
+			 \end{equation}
+			 
+			 \begin{equation}
+				 2(\Sigma^{-1} + S^{-1}) \mu - 2(\Sigma^{-1} x + S^{-1} \mu_0) = 0
+			 \end{equation}
+			 
+			 \begin{equation}
+				 2(\Sigma^{-1} + S^{-1}) \mu = 2(\Sigma^{-1} x + S^{-1} \mu_0)
+			 \end{equation}
+			 
+			 \begin{equation}
+				 (\Sigma^{-1} + S^{-1}) \mu = (\Sigma^{-1} x + S^{-1} \mu_0)
+			 \end{equation}
+			 
+			 Finally, the value of $\mu$ is 
+			 \begin{equation}
+				 \mu = (\Sigma^{-1} + S^{-1})^{-1} (\Sigma^{-1} x + S^{-1} \mu_0)
+			 \end{equation}
 \end{itemize}
 
 \end{problem}
