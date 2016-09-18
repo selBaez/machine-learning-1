@@ -192,21 +192,21 @@ Answer the following:
   \item Write down the prior $p(\wvec)$ (by expanding the expression for multivariate Gaussian distribution).  Compute its log.\\
 	  \emph{Solution:} \\
 		  \begin{align*}
-		  p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye) \\
-		  &= \frac{\alpha^{D/2}}{(2\pi)^{D/2}} \exp (- \frac{\alpha}{2} \wvec^T \wvec)
+		  	p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye) \\
+		  	&= \frac{\alpha^{D/2}}{(2\pi)^{D/2}} \exp (- \frac{\alpha}{2} \wvec^T \wvec)
 		  \end{align*}
 		  
 		  \begin{align*}
-		  \ln p(\wvec) &= \frac{D}{2} \ln \alpha - \frac{D}{2} \ln (2 \pi) - \frac{\alpha}{2}\wvec^T \wvec \\
-		  &= \frac{\alpha}{2} \wvec^T \wvec + \mathcal{C}
-		  \end{align*}  
+		  	\ln p(\wvec) &= \frac{D}{2} \ln \alpha - \frac{D}{2} \ln (2 \pi) - \frac{\alpha}{2}\wvec^T \wvec \\
+		  	&= \frac{\alpha}{2} \wvec^T \wvec + \mathcal{C}
+		  \end{align*} 
   
   \item Write down an expression for the posterior over $\wvec$.  Remember this will involve applying Bayes rule to the prior, likelihood, and evidence.  The evidence will require an integral.  You do not need the analytic form for the evidence, but you need the correct variables and conditioning variables, e.g. something like $p(a|b,c)$ where you define $a$, $b$, and $c$.\\
 	  \emph{Solution:} \\
 		  \begin{align*}
-		  p(\wvec | \Data) &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta)}{\int \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) d\wvec} \\
-		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int {\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye) d\wvec}} \\
-		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{p(t | \Phimat, \alpha, \beta)}
+		  	p(\wvec | \Data) &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta)}{\int \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) d\wvec} \\
+		  	&= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int {\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye) d\wvec}} \\
+		  	&= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{p(t | \Phimat, \alpha, \beta)}
 		  \end{align*}
   
   \item Compute the log-posterior, both for the a) and b) likelihood forms from above.  Collect everything that does not depend on $\wvec$ into a constant $C$.  What parts of the previous expression do not depend on $\wvec$?  Why is finding the MAP much simpler than finding the full posterior distribution? \\
@@ -219,55 +219,40 @@ Answer the following:
   \item Solve for $\wvecMAP$ by a) taking the derivative of the log-posterior with respect to $\wvec$, b) setting it to 0, and c) solving for $\wvec$.  Do this for both forms of likelihood.\\
 	  \emph{Solution:} \\
 		  \begin{align*}
-		  \ln p(\wvec | \Data) &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn- \wvec^T \phivecn)^{2} + \mathcal{C}
+		  	\ln p(\wvec | \Data) &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn- \wvec^T \phivecn)^{2} + \mathcal{C} \\
+		  	\frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn)(-\phivecn) = 0 \\
+		  	\alpha \wvec &= \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn) \phivecn \\
+		  	\alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \underbrace{\wvec^T \phivecn}_{\text{scalar}} \phivecn \\
+		  	\alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \phivecn \underbrace{\wvec^T \phivecn}_{\text{same as } \phivecn^{T} \wvec} \\
+		  	(\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T) \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn 
 		  \end{align*}
 		  
 		  \begin{align*}
-		  \frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn)(-\phivecn) &= 0
+		  	\wvecMAP = (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T)^{-1} \beta \sum_{n=1}^{N} \tn \phivecn
 		  \end{align*}
 		  
 		  \begin{align*}
-		  \alpha \wvec = \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn) \phivecn
+		  	\ln{p(\wvec | \Data)} &= -\frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^T (\tvec - \Phimat \wvec) + \mathcal{C} \\
+		  	&= - \frac{\alpha}{2} \wvec^T\wvec - \frac{\beta}{2}\wvec^T \Phimat^T \Phimat \wvec + \beta \wvec^T \Phimat^T \tvec + \mathcal{D}
 		  \end{align*}
 		  
 		  \begin{align*}
-		  \alpha \wvec = \beta \sum_{n=1}^{N} \tn \phivecn - \underbrace{\wvec^T \phivecn}_{\text{scalar}} \phivecn
+		  	\frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \Phimat^T \Phimat \wvec + \beta \Phimat^T \tvec = 0 
 		  \end{align*}
 		  
 		  \begin{align*}
-		  \alpha \wvec = \beta \sum_{n=1}^{N} \tn \phivecn - \phivecn \underbrace{\wvec^T \phivecn}_{\text{same as } \phivecn^{T} \wvec}
+		  	(\alpha \eye + \beta \Phimat^T \Phimat)\wvec = \beta \Phimat^T \tvec
 		  \end{align*}
 		  
 		  \begin{align*}
-		  (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T) \wvec = \beta \sum_{n=1}^{N} \tn \phivecn 
-		  \end{align*}
-		  
-		  \begin{align*}
-		  \wvecMAP = (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T)^{-1} \beta \sum_{n=1}^{N} t_n \phivecn
-		  \end{align*}
-		  
-		  \begin{align*}
-		  \ln{p(\wvec | \Data)} &= -\frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^T (\tvec - \Phimat \wvec) + \mathcal{C} \\
-		  &= - \frac{\alpha}{2} \wvec^T\wvec - \frac{\beta}{2}\wvec^T \Phimat^T \Phimat \wvec + \beta \wvec^T \Phimat^T \tvec + \mathcal{D}
-		  \end{align*}
-		  
-		  \begin{align*}
-		  \frac{\partial \ln p(\wvec | D)}{\partial \wvec} &= - \alpha \wvec - \beta \mathbf{\Phi}^T\mathbf{\Phi} \wvec + \beta \mathbf{\Phi}^T \tvec = 0 
-		  \end{align*}
-		  
-		  \begin{align*}
-		  (\alpha\mathcal{I} + \beta \mathbf{\Phi}^T\mathbf{\Phi})\wvec = \beta\mathbf{\Phi}^T\tvec
-		  \end{align*}
-		  
-		  \begin{align*}
-		  \wvecMAP &= (\alpha \mathcal{I} + \beta \mathbf{\Phi}^T\mathbf{\Phi})^{-1} \beta\mathbf{\Phi}^T\tvec\\
-		  &=(\beta (\frac{\alpha}{\beta}\mathcal{I} + \mathbf{\Phi}^T\mathbf{\Phi}))^{-1} \beta\mathbf{\Phi}^T \tvec\\
-		  &= \frac{1}{\beta}(\lambda \mathbf{I} + \mathbf{\Phi}^T\mathbf{\Phi})^{-1}\mathbf{\Phi}^T\tvec
+		  	\wvecMAP &= (\alpha \eye + \beta \Phimat^T \Phimat)^{-1} \beta \Phimat^T \tvec \\
+		  	&=(\beta (\frac{\alpha}{\beta} \eye + \Phimat^T\Phimat))^{-1} \beta \Phimat^T \tvec \\
+		  	&= \frac{1}{\beta}(\lambda \eye + \Phimat^T\Phimat)^{-1}\Phimat^T \tvec
 		  \end{align*}
   
   \item {\bf BONUS}~~~Our prior for $\wvec$ assumes the same marginal distribution for each entry in $\wvec$, including that of the first basis function $\phivec_0 = 1$.  What is the role this basis function?  Why should we avoid placing the same penalty/prior for this basis?  Rewrite $p(\wvec)$ so that the first basis function has its own prior/penalty. \\
 	  \emph{Solution:} \\
-  
+		  The constant basis function acts as a bias or offset for the regression problem. If we use the same prior for this weight as for the others, we are assuming that the offset from the y-axis should somehow be penalized. This does not make too much sense a priori, so instead we use a different precision for this basis function, i.e. $\alpha_0 << \alpha$, while using $\alpha$ for all the others.
   
 \end{enumerate}
 
@@ -298,40 +283,158 @@ For each of the probability distributions above, write down their normalizing co
 \subsection{Question}
 You live in Amsterdam and find that it rains quite a lot.  You want to estimate the probability that it will rain any given day of the year.  Every month for a year you count the number of days with rain, and you get the following (from January to December): 22,19,16,16,14,14,17,18,19,20,21,21 (for a grand total of 217 days with rain).\footnote{Source: \url{http://www.amsterdam.climatemps.com/}.}  Let $r_t$ be an observation for day $t$ in the year; $r_t=1$ means there was some rain on day $t$, $r_t=0$ means there was no rain.  We want to estimate the parameter $\rho$, the probability of rain on any day of the year.  We assume a Bernouilli distribution for the observations $\{r_t\}_{t=1}^{365}$, that is $p( r_t | \rho ) = \text{Bernouilli}(r_t | \rho)$.  To answer these questions, the number of days of rain per month is not important, only the total for the year is relevant.  With this information, answer the following questions:
 \begin{enumerate}
-  \item What is the likelihood for a single observation?  For the entire set of observations? 
-  \item Write the log-likelihood for the entire set of observations.  
-  \item Solve for the MLE of $\rho$.  Do it in general (with symbols for counts $n_0$, $n_1$ for days without and with rain) and for this specific case (plug-in the numbers).
-  \item Assume a Beta prior for $\rho$ with parameters $a$ and $b$.  What is the MAP for $\rho$?
-  \item Write the form of the posterior distribution for $\rho$?  You do not need to solve it analytically.
-  \item (Optional) Solve for the posterior distribution analytically.  Hint: it is a Beta distribution.
+  \item What is the likelihood for a single observation?  For the entire set of observations? \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	p(r_t | \rho) = \rho^{r_t} (1 - \rho)^{1 - r_t}
+		  \end{align*}
+		  
+		  \begin{align*}
+		  	p(\rvec | \rho) &= \prod_{t = 1}^{T} \rho^{r_t} (1 - \rho)^{1 - r_t} \\
+		  	&= \rho^{\sum_{t = 1}^{T} r_t} (1 - \rho)^{\sum_{t = 1}^{T} 1 - r_t} \\
+		  	&= \rho^{n_1} (1 - \rho)^{n_0}
+		  \end{align*}
+  
+  
+  \item Write the log-likelihood for the entire set of observations.  \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	\ln p(\rvec | \rho) &= n_1 \ln \rho + n_0 \ln (1 - \rho)
+		  \end{align*}
+  
+  \item Solve for the MLE of $\rho$.  Do it in general (with symbols for counts $n_0$, $n_1$ for days without and with rain) and for this specific case (plug-in the numbers).\\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	\frac{\partial \ln p(\rvec | \rho)}{\partial \rho} &= \frac{n_1}{\rho} + \frac{n_0}{1 - \rho} (-1) = 0 \\
+		  	\frac{n_1}{\rho} &= \frac{n_0}{1 - \rho} \\
+		  	n_1 - n_1 \rho &= n_0 \rho \\
+		  	\rho &= \frac{n_1}{N} \\
+		  	&= 217 / 365
+		  \end{align*}
+  
+  \item Assume a Beta prior for $\rho$ with parameters $a$ and $b$.  What is the MAP for $\rho$? \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	f = \ln p(\rho | \rvec) &\propto \ln p(\rho | \rvec) + \ln p(\rho) \\
+		  	&= n_1 \ln \rho + n_0 \ln(1 - \rho) + (a - 1) \ln \rho + (b - 1) \ln(1 - \rho)
+		  \end{align*}
+		  \begin{align*}
+		  	\frac{\partial f}{\partial{\rho}} &= \frac{n_1}{\rho}-\frac{n_0}{1-\rho}+\frac{a -1}{\rho}-\frac{b-1}{1-\rho} = 0\\
+		  	&\rho= \frac{n_1 + a -1}{N + a +b -2}
+		  \end{align*}
+  
+  
+  \item Write the form of the posterior distribution for $\rho$?  You do not need to solve it analytically. \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	p(\rho\vert\textbf{r}) &= p(\textbf{r}\vert\rho)p(\rho) \\
+		  	&= \frac{\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}}{\int\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}dp} \\
+		  	&=\frac{\Gamma(\mathcal{N}+a+b)}{\Gamma(n_1+a)\Gamma(n_0+b)}\rho^{n_1+a-1}(1-\rho)^{n_0+b-1} \\
+		  	&= \mathcal{B}(\rho \vert a +n_1,b + n_0)
+		  \end{align*} 
+  
+  
+  \item (Optional) Solve for the posterior distribution analytically.  Hint: it is a Beta distribution. \\
+	  \emph{Solution:} \\
+  
+  
 \end{enumerate}
 
 \subsection{Question}
 You work in the staffing department of a maternity hospital and part of your job is to determine the staffing requirements during the night shift at your hospital.  This might mean the number of doctors and nurses at the hospital and the number of doctors on call (if there are more than the average number of deliveries).  Your goal is to determine the distribution over the number of deliveries during the night shift $d_t \in \{0,1,2,\ldots\}$ ($d$ for delivery count, $t$ for time, the index of the night).  With this you can compute the mean, the probability of more than $5$ deliveries, etc.  You collect data for two weeks, i.e. $d_1, \ldots, d_{14} = 4, 7, 3, 0, 2, 2, 1, 5, 4, 4, 3, 3, 2, 3$.  You assume the observations are explained by a Poisson distribution with parameter $\lambda$ over the discrete delivery counts. With this information, answer the following questions:
 %
 \begin{enumerate}
-  \item What is the likelihood for a single observation?  For the entire set of observations? 
-  \item Write the log-likelihood for the entire set of observations.  
-  \item Solve for the MLE of $\lambda$.  Do it in general and for this specific case (plug-in the numbers).
-  \item Assume a Gamma prior for $\lambda$ with parameters $a$ and $b$.  What is the MAP estimate of $\lambda$?
-  \item Write the form of the posterior distribution for $\lambda$? (You do not need to solve it analytically)
-  \item (Optional) Solve for the posterior distribution analytically.  Hint: it is a Gamma distribution.
+  \item What is the likelihood for a single observation?  For the entire set of observations? \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	&p(d_t\vert \lambda) = \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
+		  	p(\textbf{d} \vert \lambda)&=\prod_{t=1}^{T} \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
+		  	&=\frac{\lambda^{\sum_{t=1}^{T}d_t}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda) \\
+		  	&=\frac{\lambda^{n}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda))
+		  \end{align*}
+  
+  \item Write the log-likelihood for the entire set of observations. \\
+	  \emph{Solution:} \\
+  
+   
+  \item Solve for the MLE of $\lambda$.  Do it in general and for this specific case (plug-in the numbers). \\
+  \emph{Solution:} \\
+  
+  \item Assume a Gamma prior for $\lambda$ with parameters $a$ and $b$.  What is the MAP estimate of $\lambda$? \\
+  \emph{Solution:} \\
+  
+  \item Write the form of the posterior distribution for $\lambda$? (You do not need to solve it analytically) \\
+  \emph{Solution:} \\
+  
+  \item (Optional) Solve for the posterior distribution analytically.  Hint: it is a Gamma distribution. \\
+  \emph{Solution:} \\
+  
 \end{enumerate}
 
 \subsection{Question}
 You have developed a blood test aimed at detecting a disease $d \in \{0,1\}$ (disease is absent ($d=0$) or present ($d=1$)).  The test measures the level of a specific indicator of the disease, that is it returns a real valued number relative to some baseline (so the levels can be both negative and positive -- anywhere along the real line).  Two models of the population are built: one for the patients with the disease, and another for the general population.  Measurements tend to have a Gaussian shape, and we therefore model the entire population as a mixture of two Gaussians.  That is, $p( l ) = p(d=0) p( l | d=0 ) + p(d=1) p( l | d=1 )$, where $p(d)$ is the prior distribution of patients with and without the disease in the general population and $p(l|d)$  are conditional Gaussian distributions, one for the patients with disease, and one for those without.  Note: with this question and the previous two, we are simply applying rules of probability (with some algebra) to get the form of the posterior distribution; however, in this problem we are also classifying (since our target is the discrete label $d$).
 
 Assume we know $p(d=0) = \pi_0 = 0.999$ and $p(d=1) = \pi_1 = 0.001$ from previous experience.  We do not know the parameters $\mu_0, \sigma_0^2$ (the mean and variance of the disease-free population) nor $\mu_1, \sigma_1^2$ (for the disease population).  We measure levels $\{ l_n\}_{n=1}^N$ for N people, and we know that $n\in\{D_0\}$ are the indices for the disease free patients and $n\in\{D_1\}$ are the indices for the patients with the disease (i.e. $D_0$ and $D_1$ are non-intersecting sets of indices from $1$ to $N$).  With this information, answer the following questions:
+
 \begin{enumerate}
-  \item Write down the likelihood of the observations as a product over $N$ level recordings.  Hint: use indicator notation (like in the Bernouilli distribution) to distinguish between $d_n=0$ and $d_n=1$ in the likelihood.
-  \item Write down the likelihood as a product over the likelihoods for $\{D_0\}$ and $\{D_1\}$.
-  \item Compute the log-likelihood.
-  \item Find the MLE for $\mu_0$ and $\sigma_0^2$.  Assume we can do the same for $\mu_1$ and $\sigma_1^2$
-  \item We now have our models.  To make a prediction, solve for $p( d=1 | l_{\star})$, where $l_{\star}$ is a level recorded for a new patient.  Hint: use Bayes theorem.
+  \item Write down the likelihood of the observations as a product over $N$ level recordings.  Hint: use indicator notation (like in the Bernouilli distribution) to distinguish between $d_n=0$ and $d_n=1$ in the likelihood. \\
+  \emph{Solution:} \\
+	  \begin{align*}
+	  	p(\dvec, \lvec | \thetavec) &= \prod_{n = 1}^{N} (\pi_1 \mathcal{N} (l_{n} | \mu_{1}, \sigma_{1}^{2}) )^{d_n} (\pi_0 \mathcal{N} (l_{n} | \mu_{0}, \sigma_{0}^{2})) ^{1 - d_n} 
+	  \end{align*}
+  
+  \item Write down the likelihood as a product over the likelihoods for $\{D_0\}$ and $\{D_1\}$. \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	p(\dvec, \lvec | \thetavec) 
+		  	&= ( \prod_{n \in D_1} \pi_{1} \mathcal{N}(l_n | \mu_{1} , \sigma_{1}^{2})) ( \prod_{n \in D_0} \pi_{0} \mathcal{N}(l_n | \mu_{0} , \sigma_{0}^{2}))
+		  \end{align*}
+  
+  \item Compute the log-likelihood. \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	\ln p(\dvec, \lvec | \thetavec) &= \sum_{n \in D_{1}}(\ln \pi_{1} + \ln \mathcal{N}(l_{n} | \mu_{1}, \sigma_{1}^{2}) ) + \sum_{n \in D_{0}} (\ln \pi_{0} + \ln \mathcal{N}(l_{n} | \mu_{0}, \sigma_{0}^{2})) \\
+		  	&= \sum_{n \in D_{1}}(\ln \pi_{1} + \frac{1}{2} \ln (2 \pi) - \frac{1}{2} \ln (\sigma_{1}^{2}) - \frac{1}{2} \frac{(l_{n} - \mu_{1})^{2}}{\sigma_{1}^{2}}) \\
+		  	&+ \sum_{n \in D_{0}}  (\ln \pi_{0} + \frac{1}{2} \ln (2 \pi) - \frac{1}{2} \ln (\sigma_{0}^{2}) - \frac{1}{2} \frac{(l_{n} - \mu_{1})^{2}}{\sigma_{0}^{2}})
+		  \end{align*}
+  
+  \item Find the MLE for $\mu_0$ and $\sigma_0^2$.  Assume we can do the same for $\mu_1$ and $\sigma_1^2$ \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	\frac{\partial \ln p(\dvec, \lvec | \thetavec)}{\partial \mu_{0}} &= \sum_{n \in D_{0}} (- \frac{(l_{n} - \mu_{0})}{\sigma_{0}^{2}} (-1)) = 0 \\
+		  	0 &= \sum_{n \in D_{0}} (l_{n} - \mu_{0}) \\
+		  	0 &= \sum_{n \in D_{0}} l_{n} - N_{0} \mu_{0} \\
+		  	\mu_{0} &= \frac{1}{N_{0}} \sum_{n \in D_{0}} l_{n}
+		  \end{align*}
+		  
+		  \begin{align*}
+		  	\frac{\partial \ln p(\dvec, \lvec | \thetavec)}{\partial \sigma_{0}^{2}} &= \sum_{n \in D_{0}} (- \frac{1}{2 \sigma_{0}^{2}} - \frac{1}{2} \frac{(l_{n} - \mu_{0})^{2}}{(\sigma_{0}^{2})^{2}}(-1)) \\
+		  	\frac{N_{0}}{2 \sigma_{0}^{2}} &= \frac{1}{2} \frac{\sum_{n \in D_{0}} (l_{n} - \mu_{0})^{2}}{(\sigma_{0}^{2}) ^{2}} \\
+		  	\sigma_{0}^{2} &= \frac{1}{N_{0}} \sum_{n \in D_{0}} (l_{n} - \mu_{0})^{2}
+		  \end{align*}
+  
+  \item We now have our models.  To make a prediction, solve for $p( d=1 | l_{\star})$, where $l_{\star}$ is a level recorded for a new patient.  Hint: use Bayes theorem. \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	p(d = 1 | l_{*}) &= \frac{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2}) + \pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})} \\
+		  	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}} \\
+		  	&= \frac{1}{1 + \exp^{-a(l_{*})}} \\
+		  	a(l_{*}) &= \ln (\frac{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})})
+		  \end{align*}
+  
+  
   \item Reduce your solution to have the form of a sigmoid, i.e. 
       \begin{equation*}
          p(d=1|l_{\star}) = \frac{1}{1+e^{-a(l_{\star})}}.
       \end{equation*}
+      \\
+	      \emph{Solution:} \\
+	      %TODO
+		      \begin{align*}
+		      	p(d = 1 | l_{*}) = \frac{1}{1 + \exp ^{-a(l_{*})}} 
+		      	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}} \\
+		      \end{align*}
+   
   
 \end{enumerate}
 
