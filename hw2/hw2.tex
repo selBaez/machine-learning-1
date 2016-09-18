@@ -178,12 +178,97 @@ In class we solved for the maximum likelihood estimator for linear regression wi
 \end{itemize}
 Answer the following:
 \begin{enumerate}
-  \item Write down the likelihood $p(\Data | \thetav)$ using a) a product over $N$ and b) in vector/matrix form.    Tip: You can answer both a) and b) in one set of equations by starting with a), then simplifying to get b).  For b) make sure to define any matrices and vectors.
-  \item Write down the prior $p(\wvec)$ (by expanding the expression for multivariate Gaussian distribution).  Compute its log.
-  \item Write down an expression for the posterior over $\wvec$.  Remember this will involve applying Bayes rule to the prior, likelihood, and evidence.  The evidence will require an integral.  You do not need the analytic form for the evidence, but you need the correct variables and conditioning variables, e.g. something like $p(a|b,c)$ where you define $a$, $b$, and $c$.
-  \item Compute the log-posterior, both for the a) and b) likelihood forms from above.  Collect everything that does not depend on $\wvec$ into a constant $C$.  What parts of the previous expression do not depend on $\wvec$?  Why is finding the MAP much simpler than finding the full posterior distribution? 
-  \item Solve for $\wvecMAP$ by a) taking the derivative of the log-posterior with respect to $\wvec$, b) setting it to 0, and c) solving for $\wvec$.  Do this for both forms of likelihood.
-  \item {\bf BONUS}~~~Our prior for $\wvec$ assumes the same marginal distribution for each entry in $\wvec$, including that of the first basis function $\phivec_0 = 1$.  What is the role this basis function?  Why should we avoid placing the same penalty/prior for this basis?  Rewrite $p(\wvec)$ so that the first basis function has its own prior/penalty.
+  \item Write down the likelihood $p(\Data | \thetav)$ using a) a product over $N$ and b) in vector/matrix form.    Tip: You can answer both a) and b) in one set of equations by starting with a), then simplifying to get b).  For b) make sure to define any matrices and vectors. \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  p(\Data | \thetav) &= \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) \\
+		  &=  \prod_{n=1}^{N} \frac{\beta^{1/2}}{(2\pi)^{1/2}} \exp (-\frac{\beta}{2}(\tn- \wvec^T \phivecn)^2)\\
+		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \prod_{n=1}^{N} \exp (-\frac{\beta}{2}(\tn- \wvec^T \phivecn)^2)\\    
+		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \exp (-\frac{\beta}{2}\sum(\tn - \wvec^T \phivecn)^2)\\    
+		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \exp (-\frac{\beta}{2}(\tvec - \Phimat \wvec)^T(\tvec - \Phimat \wvec))\\
+		  &=\mathcal{N}(\tvec | \Phimat \wvec, \beta^{-1} \eye )
+		  \end{align*}
+	  
+  \item Write down the prior $p(\wvec)$ (by expanding the expression for multivariate Gaussian distribution).  Compute its log.\\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye) \\
+		  &= \frac{\alpha^{D/2}}{(2\pi)^{D/2}} \exp (- \frac{\alpha}{2} \wvec^T \wvec)
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \ln p(\wvec) &= \frac{D}{2} \ln \alpha - \frac{D}{2} \ln (2 \pi) - \frac{\alpha}{2}\wvec^T \wvec \\
+		  &= \frac{\alpha}{2} \wvec^T \wvec + \mathcal{C}
+		  \end{align*}  
+  
+  \item Write down an expression for the posterior over $\wvec$.  Remember this will involve applying Bayes rule to the prior, likelihood, and evidence.  The evidence will require an integral.  You do not need the analytic form for the evidence, but you need the correct variables and conditioning variables, e.g. something like $p(a|b,c)$ where you define $a$, $b$, and $c$.\\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  p(\wvec | \Data) &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta)}{\int \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) d\wvec} \\
+		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int {\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye) d\wvec}} \\
+		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{p(t | \Phimat, \alpha, \beta)}
+		  \end{align*}
+  
+  \item Compute the log-posterior, both for the a) and b) likelihood forms from above.  Collect everything that does not depend on $\wvec$ into a constant $C$.  What parts of the previous expression do not depend on $\wvec$?  Why is finding the MAP much simpler than finding the full posterior distribution? \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  \ln p(\wvec | \Data) &= - \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn - \wvec^T \phivecn)^{2} + \mathcal{C} \\
+		  &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^{T} (\tvec - \Phimat \wvec) + \mathcal{C}
+		  \end{align*}
+  
+  \item Solve for $\wvecMAP$ by a) taking the derivative of the log-posterior with respect to $\wvec$, b) setting it to 0, and c) solving for $\wvec$.  Do this for both forms of likelihood.\\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  \ln p(\wvec | \Data) &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn- \wvec^T \phivecn)^{2} + \mathcal{C}
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn)(-\phivecn) &= 0
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \alpha \wvec = \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn) \phivecn
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \alpha \wvec = \beta \sum_{n=1}^{N} \tn \phivecn - \underbrace{\wvec^T \phivecn}_{\text{scalar}} \phivecn
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \alpha \wvec = \beta \sum_{n=1}^{N} \tn \phivecn - \phivecn \underbrace{\wvec^T \phivecn}_{\text{same as } \phivecn^{T} \wvec}
+		  \end{align*}
+		  
+		  \begin{align*}
+		  (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T) \wvec = \beta \sum_{n=1}^{N} \tn \phivecn 
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \wvecMAP = (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T)^{-1} \beta \sum_{n=1}^{N} t_n \phivecn
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \ln{p(\wvec | \Data)} &= -\frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^T (\tvec - \Phimat \wvec) + \mathcal{C} \\
+		  &= - \frac{\alpha}{2} \wvec^T\wvec - \frac{\beta}{2}\wvec^T \Phimat^T \Phimat \wvec + \beta \wvec^T \Phimat^T \tvec + \mathcal{D}
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \frac{\partial \ln p(\wvec | D)}{\partial \wvec} &= - \alpha \wvec - \beta \mathbf{\Phi}^T\mathbf{\Phi} \wvec + \beta \mathbf{\Phi}^T \tvec = 0 
+		  \end{align*}
+		  
+		  \begin{align*}
+		  (\alpha\mathcal{I} + \beta \mathbf{\Phi}^T\mathbf{\Phi})\wvec = \beta\mathbf{\Phi}^T\tvec
+		  \end{align*}
+		  
+		  \begin{align*}
+		  \wvecMAP &= (\alpha \mathcal{I} + \beta \mathbf{\Phi}^T\mathbf{\Phi})^{-1} \beta\mathbf{\Phi}^T\tvec\\
+		  &=(\beta (\frac{\alpha}{\beta}\mathcal{I} + \mathbf{\Phi}^T\mathbf{\Phi}))^{-1} \beta\mathbf{\Phi}^T \tvec\\
+		  &= \frac{1}{\beta}(\lambda \mathbf{I} + \mathbf{\Phi}^T\mathbf{\Phi})^{-1}\mathbf{\Phi}^T\tvec
+		  \end{align*}
+  
+  \item {\bf BONUS}~~~Our prior for $\wvec$ assumes the same marginal distribution for each entry in $\wvec$, including that of the first basis function $\phivec_0 = 1$.  What is the role this basis function?  Why should we avoid placing the same penalty/prior for this basis?  Rewrite $p(\wvec)$ so that the first basis function has its own prior/penalty. \\
+	  \emph{Solution:} \\
+  
+  
 \end{enumerate}
 
 \vspace{0.25in}
