@@ -277,8 +277,33 @@ For these questions you will be working with different probability density funct
 \end{table}
 
 \subsection{Question}
-For each of the probability distributions above, write down their normalizing constants.  Remember that $\int p(x|\theta) d x = 1$ for continuous $x$ and $\sum_x p(x|
-\theta) = 1$ for discrete $x$.
+For each of the probability distributions above, write down their normalizing constants.  Remember that $\int p(x|\theta) d x = 1$ for continuous $x$ and $\sum_x p(x| \theta) = 1$ for discrete $x$.  \\
+	\emph{Solution:} \\
+			\begin{enumerate}
+				\item{Bernouilli} \\
+				There is no normalizing constant in this case
+				
+				\item{Beta}
+				\begin{align*}
+					= \frac{\Gamma (\theta_1 + \theta_0)}{\Gamma (\theta_1) \Gamma (\theta_0)}
+				\end{align*}
+				
+				\item{Poisson}
+				\begin{align*}
+					= \exp^{\theta}
+				\end{align*}
+				
+				\item{Gamma}
+				\begin{align*}
+					= \frac{\theta_{1}^{\theta_{0}}}{\Gamma (\theta_{0})}
+				\end{align*}
+				
+				\item{Gaussian}
+				\begin{align*}
+					= \frac{1}{\sqrt[]{2\pi \theta_{1}}}
+				\end{align*}
+				
+			\end{enumerate}
 
 \subsection{Question}
 You live in Amsterdam and find that it rains quite a lot.  You want to estimate the probability that it will rain any given day of the year.  Every month for a year you count the number of days with rain, and you get the following (from January to December): 22,19,16,16,14,14,17,18,19,20,21,21 (for a grand total of 217 days with rain).\footnote{Source: \url{http://www.amsterdam.climatemps.com/}.}  Let $r_t$ be an observation for day $t$ in the year; $r_t=1$ means there was some rain on day $t$, $r_t=0$ means there was no rain.  We want to estimate the parameter $\rho$, the probability of rain on any day of the year.  We assume a Bernouilli distribution for the observations $\{r_t\}_{t=1}^{365}$, that is $p( r_t | \rho ) = \text{Bernouilli}(r_t | \rho)$.  To answer these questions, the number of days of rain per month is not important, only the total for the year is relevant.  With this information, answer the following questions:
@@ -350,24 +375,47 @@ You work in the staffing department of a maternity hospital and part of your job
 		  	&p(d_t\vert \lambda) = \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
 		  	p(\textbf{d} \vert \lambda)&=\prod_{t=1}^{T} \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
 		  	&=\frac{\lambda^{\sum_{t=1}^{T}d_t}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda) \\
-		  	&=\frac{\lambda^{n}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda))
+		  	&=\frac{\lambda^{n}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda)
 		  \end{align*}
   
   \item Write the log-likelihood for the entire set of observations. \\
 	  \emph{Solution:} \\
+		  \begin{align*}
+		  	\ln p(\textbf{d}\vert\lambda) = n\ln\lambda - T \lambda - \sum_{t=1}^{T}\ln(d_t!)
+		  \end{align*}
   
    
   \item Solve for the MLE of $\lambda$.  Do it in general and for this specific case (plug-in the numbers). \\
-  \emph{Solution:} \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	f &= \ln p(\textbf{d} \vert \lambda)\\ 
+		  	&= n \ln\lambda - T\lambda- \sum_{t=1}^{T}\ln(d_t!) \\
+		  	\frac{\partial f}{\partial \lambda} &= \frac{n}{\lambda} - T = 0 \\
+		  	\lambda &= \frac{n}{T} = \frac{43}{14}
+		  \end{align*}
   
   \item Assume a Gamma prior for $\lambda$ with parameters $a$ and $b$.  What is the MAP estimate of $\lambda$? \\
-  \emph{Solution:} \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  	f &= \ln p(\textbf{d} \vert \lambda)+\ln p(\lambda) \\
+		  	&= n \ln \lambda - T\lambda - \sum_{t=1}^{T}d_t! + (a-1)\ln\lambda-b\lambda + C \\ 
+		  	\frac{\partial f}{\partial \lambda} &= \frac{n}{\lambda} - T + \frac{(a - 1)}{\lambda} - b = 0 \\
+		  	&\lambda = \frac{n + a -1}{T + b}\\
+		  \end{align*}
   
   \item Write the form of the posterior distribution for $\lambda$? (You do not need to solve it analytically) \\
-  \emph{Solution:} \\
+	  \emph{Solution:} \\
+		  \begin{align*}
+		  p(\lambda \vert \textbf{d}) &= \frac{p(\textbf{d}\vert \lambda)p(\lambda)}{\int p(\textbf{d}\vert \lambda)p(\lambda)d\lambda} \\
+		  &= \frac{\frac{\lambda^n}{\prod_{t=1}^{T}d_t!} \exp(-T\lambda)\frac{b^a}{\Gamma(a)}\lambda^{a-1} \exp(-b\lambda)}{\int \frac{\lambda^n}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda)\frac{b^a}{\Gamma(a)}\lambda^{a-1} \exp(-b\lambda)d\lambda}\\ 
+		  &=\frac{\lambda^{n+a-1}\exp(-(T + b)\lambda)}{\int\lambda^{n+a-1}\exp(-(T + b)\lambda)d\lambda} \\
+		  &=\frac{(T+b)^{n+a}}{\Gamma(n+a)}\lambda^{n+a-1}\exp(-(T + b)\lambda)\\
+		  &= \mathcal{G}(\lambda \vert a + n, b + T)
+		  \end{align*}
+  
   
   \item (Optional) Solve for the posterior distribution analytically.  Hint: it is a Gamma distribution. \\
-  \emph{Solution:} \\
+	  \emph{Solution:} \\
   
 \end{enumerate}
 
@@ -408,7 +456,7 @@ Assume we know $p(d=0) = \pi_0 = 0.999$ and $p(d=1) = \pi_1 = 0.001$ from previo
 		  \end{align*}
 		  
 		  \begin{align*}
-		  	\frac{\partial \ln p(\dvec, \lvec | \thetavec)}{\partial \sigma_{0}^{2}} &= \sum_{n \in D_{0}} (- \frac{1}{2 \sigma_{0}^{2}} - \frac{1}{2} \frac{(l_{n} - \mu_{0})^{2}}{(\sigma_{0}^{2})^{2}}(-1)) \\
+		  	\frac{\partial \ln p(\dvec, \lvec | \thetavec)}{\partial \sigma_{0}^{2}} &= \sum_{n \in D_{0}} (- \frac{1}{2 \sigma_{0}^{2}} - \frac{1}{2} \frac{(l_{n} - \mu_{0})^{2}}{(\sigma_{0}^{2})^{2}}(-1)) = 0 \\
 		  	\frac{N_{0}}{2 \sigma_{0}^{2}} &= \frac{1}{2} \frac{\sum_{n \in D_{0}} (l_{n} - \mu_{0})^{2}}{(\sigma_{0}^{2}) ^{2}} \\
 		  	\sigma_{0}^{2} &= \frac{1}{N_{0}} \sum_{n \in D_{0}} (l_{n} - \mu_{0})^{2}
 		  \end{align*}
@@ -416,10 +464,10 @@ Assume we know $p(d=0) = \pi_0 = 0.999$ and $p(d=1) = \pi_1 = 0.001$ from previo
   \item We now have our models.  To make a prediction, solve for $p( d=1 | l_{\star})$, where $l_{\star}$ is a level recorded for a new patient.  Hint: use Bayes theorem. \\
 	  \emph{Solution:} \\
 		  \begin{align*}
-		  	p(d = 1 | l_{*}) &= \frac{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2}) + \pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})} \\
-		  	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}} \\
-		  	&= \frac{1}{1 + \exp^{-a(l_{*})}} \\
-		  	a(l_{*}) &= \ln (\frac{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})})
+		  	p(d = 1 | l_{\star}) &= \frac{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2})}{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2}) + \pi_0 \mathcal{N} (l_{\star} | \mu_{0}, \sigma_{0}^{2})} \\
+		  	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{\star} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2})}} \\
+		  	&= \frac{1}{1 + \exp^{-a(l_{\star})}} \\
+		  	a(l_{\star}) &= \ln (\frac{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2})}{\pi_0 \mathcal{N} (l_{\star} | \mu_{0}, \sigma_{0}^{2})})
 		  \end{align*}
   
   
@@ -429,10 +477,9 @@ Assume we know $p(d=0) = \pi_0 = 0.999$ and $p(d=1) = \pi_1 = 0.001$ from previo
       \end{equation*}
       \\
 	      \emph{Solution:} \\
-	      %TODO
 		      \begin{align*}
-		      	p(d = 1 | l_{*}) = \frac{1}{1 + \exp ^{-a(l_{*})}} 
-		      	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{*} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{*} | \mu_{1}, \sigma_{1}^{2})}} \\
+		      	p(d = 1 | l_{\star}) = \frac{1}{1 + \exp ^{-a(l_{\star})}} 
+		      	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{\star} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2})}} \\
 		      \end{align*}
    
   
