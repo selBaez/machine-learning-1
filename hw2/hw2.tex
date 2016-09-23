@@ -180,79 +180,161 @@ Answer the following:
 \begin{enumerate}
   \item Write down the likelihood $p(\Data | \thetav)$ using a) a product over $N$ and b) in vector/matrix form.    Tip: You can answer both a) and b) in one set of equations by starting with a), then simplifying to get b).  For b) make sure to define any matrices and vectors. \\
 	  \emph{Solution:} \\
+		  Given that the likelihood function for a single training vector is a normal distribution, we can write its product as: \\
+		  
 		  \begin{align*}
-		  p(\Data | \thetav) &= \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) \\
+		  p(\Data | \thetav) &= p(\tvec | \Phimat, \wvec, \beta) \\
+		  &= \prod_{n = 0}^N p(\tn | \phivecn, \wvec, \beta) \\
+		  &= \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) \\
 		  &=  \prod_{n=1}^{N} \frac{\beta^{1/2}}{(2\pi)^{1/2}} \exp (-\frac{\beta}{2}(\tn- \wvec^T \phivecn)^2)\\
-		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \prod_{n=1}^{N} \exp (-\frac{\beta}{2}(\tn- \wvec^T \phivecn)^2)\\    
-		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \exp (-\frac{\beta}{2}\sum(\tn - \wvec^T \phivecn)^2)\\    
-		  &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \exp (-\frac{\beta}{2}(\tvec - \Phimat \wvec)^T(\tvec - \Phimat \wvec))\\
-		  &=\mathcal{N}(\tvec | \Phimat \wvec, \beta^{-1} \eye )
 		  \end{align*}
+		  
+		  In order to reach a vector form, we solve the product: \\
+		  
+		  \begin{align*}         
+		  p(\Data | \thetav) &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \prod_{n=1}^{N} \exp (-\frac{\beta}{2}(\tn- \wvec^T \phivecn)^2)\\    
+		  &=  \underbrace{\frac{\beta^{N/2}}{(2\pi)^{N/2}}}_{\text{constant term}} \exp (-\frac{\beta}{2}\sum(\tn - \wvec^T \phivecn)^2)\\ 
+		  \end{align*}
+		  
+		  Next, Using the fact that $\sum_i x_i^2 = \mathbf{x}^T\mathbf{x}$, we transform the $\tn$ into a vector, and $\phivecn$ into a matrix, where \\
+		  
+		  \begin{equation*}
+		  \Phimat = 
+		  \begin{pmatrix}
+		  - \phivec_1 - \\
+		  - \phivec_2 - \\
+		  \vdots  \\
+		  - \phivec_N -\\
+		  \end{pmatrix}
+		  \end{equation*}
+		  
+		  Thus: \\
+		  
+		  \begin{align*}
+		  p(\Data | \thetav) &=  \frac{\beta^{N/2}}{(2\pi)^{N/2}} \exp (-\frac{\beta}{2}(\tvec - \Phimat \wvec)^T(\tvec - \Phimat \wvec))\\
+		  &=\mathcal{N}(\tvec | \Phimat \wvec, \frac{1}{\beta} \eye )
+		  \end{align*}
+		  
+		  We can see that the product is also a Normal disribution. \\
+		  
 	  
   \item Write down the prior $p(\wvec)$ (by expanding the expression for multivariate Gaussian distribution).  Compute its log.\\
 	  \emph{Solution:} \\
-		  \begin{align*}
-		  	p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye) \\
-		  	&= \frac{\alpha^{D/2}}{(2\pi)^{D/2}} \exp (- \frac{\alpha}{2} \wvec^T \wvec)
-		  \end{align*}
+		  The prior $p(\wvec)$ is given by a normal distribution with $\mu = 0$ and $\sigma = \frac{1}{\alpha}\eye$. Expanding over the general formula of the Normal Distribution we get: \\
 		  
 		  \begin{align*}
-		  	\ln p(\wvec) &= \frac{D}{2} \ln \alpha - \frac{D}{2} \ln (2 \pi) - \frac{\alpha}{2}\wvec^T \wvec \\
-		  	&= \frac{\alpha}{2} \wvec^T \wvec + \mathcal{C}
-		  \end{align*} 
+		  p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye) \\
+		  &= \frac{\alpha^{D/2}}{(2\pi)^{D/2}} \exp (- \frac{\alpha}{2} \wvec^T \wvec)
+		  \end{align*}
+		  
+		  Where $\mathcal{D}$ is the dimensionality of \textbf{w}. \\
+		  
+		  Next, because $\log(\frac{a}{b}) = \log(a) - \log(b)$, $\log(ab) = \log(a) + \log(b)$ and $\log(\exp(x)) = x$ \\
+		  
+		  \begin{align*}
+		  \ln p(\wvec) &= \underbrace{\frac{D}{2} \ln \alpha - \frac{D}{2} \ln (2 \pi)}_{\text{constant term}} + (- \frac{\alpha}{2}\wvec^T \wvec) \\
+		  &= \frac{- \alpha}{2} \wvec^T \wvec + \mathcal{C}
+		  \end{align*}
+		  
+		  Where $\mathcal{C}$ is a constant term. \\
   
   \item Write down an expression for the posterior over $\wvec$.  Remember this will involve applying Bayes rule to the prior, likelihood, and evidence.  The evidence will require an integral.  You do not need the analytic form for the evidence, but you need the correct variables and conditioning variables, e.g. something like $p(a|b,c)$ where you define $a$, $b$, and $c$.\\
 	  \emph{Solution:} \\
+		  According to Bayes rule we have:
+		  
 		  \begin{align*}
-		  	p(\wvec | \Data) &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta)}{\int \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \prod_{n=1}^{N} \mathcal{N}(\tn| \wvec^T \phivecn, 1 / \beta) d\wvec} \\
-		  	&= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int {\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye) d\wvec}} \\
-		  	&= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{p(t | \Phimat, \alpha, \beta)}
+		  p(\wvec | \mathcal{D}) &= \frac{p(\wvec) p(\mathcal{D} | \wvec) }{p(\Data)} \\
+		  \end{align*}
+		  
+		  From previous questions we got the likelihood and prior for the Bayes rule: \\
+		  
+		  \begin{align*}
+		  p(\Data | \thetav) &= p(\Data | \wvec) \\
+		  &= \mathcal{N}(\tvec | \Phimat \wvec, \frac{1}{\beta} \eye )
+		  \end{align*}
+		  
+		  \begin{align*}
+		  p(\wvec) &= \mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha}\eye)
+		  \end{align*}
+		  
+		  We express the evidence by marginalizing. Since this is a continuous distribution, it requires an integral over $\wvec$ \\
+		  
+		  \begin{align*}
+		  p(\Data) &= \int (p(\mathcal{D} | \wvec) p(\wvec) ) d\wvec\\
+		  \end{align*}
+		  
+		  Substituting in Bayes Rule, we get: \\
+		  
+		  \begin{align*}
+		  p(\wvec | \Data) &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int {\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye) d\wvec}} \\ \\
+		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{\int p(\tvec | \Phimat, \wvec, \beta) p(\wvec | \alpha)d\wvec} \\ \\
+		  &= \frac{\mathcal{N}(\wvec | \zerovec, \frac{1}{\alpha} \eye) \mathcal{N} (\tvec | \Phimat \wvec, \frac{1}{\beta} \eye)}{p(t | \Phimat, \alpha, \beta)}
 		  \end{align*}
   
   \item Compute the log-posterior, both for the a) and b) likelihood forms from above.  Collect everything that does not depend on $\wvec$ into a constant $C$.  What parts of the previous expression do not depend on $\wvec$?  Why is finding the MAP much simpler than finding the full posterior distribution? \\
 	  \emph{Solution:} \\
 		  \begin{align*}
-		  \ln p(\wvec | \Data) &= - \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn - \wvec^T \phivecn)^{2} + \mathcal{C} \\
-		  &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^{T} (\tvec - \Phimat \wvec) + \mathcal{C}
+		  \ln p(\wvec | \Data) &= \ln (\frac{p(\wvec) p(\mathcal{D} | \wvec) }{p(\Data)}) \\ \\
+		  &= \ln p(\wvec) + \ln p(\mathcal{D} | \wvec) - \underbrace{\ln p(\Data)}_{\text{independent of \wvec}} \\ \\
+		  &= - \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn - \wvec^T \phivecn)^{2} + \mathcal{C} \\ \\
+		  &= - \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^{T} (\tvec - \Phimat \wvec) + \mathcal{C}
 		  \end{align*}
+		  
+		  We can see that finding MAP is simpler because the evidence term (found in the full posterior distribution) becomes a constant term independent of $\wvec$, when finding its log. Furthermore, when finding the derivative of the log, the constant term goes to zero and it is discarded\\
   
   \item Solve for $\wvecMAP$ by a) taking the derivative of the log-posterior with respect to $\wvec$, b) setting it to 0, and c) solving for $\wvec$.  Do this for both forms of likelihood.\\
 	  \emph{Solution:} \\
+		  First we solve in the non-matrix form. Given that the log likelihood is: \\
 		  \begin{align*}
-		  	\ln p(\wvec | \Data) &= \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn- \wvec^T \phivecn)^{2} + \mathcal{C} \\
-		  	\frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn)(-\phivecn) = 0 \\
-		  	\alpha \wvec &= \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn) \phivecn \\
-		  	\alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \underbrace{\wvec^T \phivecn}_{\text{scalar}} \phivecn \\
-		  	\alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \phivecn \underbrace{\wvec^T \phivecn}_{\text{same as } \phivecn^{T} \wvec} \\
-		  	(\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T) \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn 
+		  \ln p(\wvec | \Data) &= - \frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} \sum_{n=1}^{N}(\tn- \wvec^T \phivecn)^{2} + \mathcal{C} 			\end{align*}
+		  
+		  We find its derivative and set it to $0$:
+		  
+		  \begin{align*}
+		  \frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn)(-\phivecn) = 0 
+		  \end{align*}
+		  
+		  Solving for $\wvec$
+		  
+		  \begin{align*}
+		  \alpha \wvec &= \beta \sum_{n=1}^{N} (\tn- \wvec^T \phivecn) \phivecn \\
+		  \alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \underbrace{\wvec^T \phivecn}_{\text{scalar}} \phivecn \\
+		  \alpha \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn - \phivecn \underbrace{\wvec^T \phivecn}_{\text{same as } \phivecn^{T} \wvec} \\
+		  (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T) \wvec &= \beta \sum_{n=1}^{N} \tn \phivecn 
 		  \end{align*}
 		  
 		  \begin{align*}
-		  	\wvecMAP = (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T)^{-1} \beta \sum_{n=1}^{N} \tn \phivecn
+		  \wvecMAP = (\alpha \eye + \beta \sum_{n=1}^{N} \phivecn\phivecn^T)^{-1} \beta \sum_{n=1}^{N} \tn \phivecn
+		  \end{align*}
+		  
+		  Secondly, we solve in a matrix form. Again, given the log likelihood is: \\
+		  
+		  \begin{align*}
+		  \ln{p(\wvec | \Data)} &= -\frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^T (\tvec - \Phimat \wvec) + \mathcal{C} \\ \\
+		  &= - \frac{\alpha}{2} \wvec^T\wvec - \frac{\beta}{2}\wvec^T \Phimat^T \Phimat \wvec + \beta \wvec^T \Phimat^T \tvec + \mathcal{D}
+		  \end{align*}
+		  
+		  The derivative is given by: \\
+		  
+		  \begin{align*}
+		  \frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \Phimat^T \Phimat \wvec + \beta \Phimat^T \tvec = 0 
+		  \end{align*}
+		  
+		  Solving for $\wvecMAP$:
+		  
+		  \begin{align*}
+		  (\alpha \eye + \beta \Phimat^T \Phimat)\wvec = \beta \Phimat^T \tvec
 		  \end{align*}
 		  
 		  \begin{align*}
-		  	\ln{p(\wvec | \Data)} &= -\frac{\alpha}{2} \wvec^T \wvec - \frac{\beta}{2} (\tvec - \Phimat \wvec)^T (\tvec - \Phimat \wvec) + \mathcal{C} \\
-		  	&= - \frac{\alpha}{2} \wvec^T\wvec - \frac{\beta}{2}\wvec^T \Phimat^T \Phimat \wvec + \beta \wvec^T \Phimat^T \tvec + \mathcal{D}
-		  \end{align*}
-		  
-		  \begin{align*}
-		  	\frac{\partial \ln p(\wvec | \Data)}{\partial \wvec} &= - \alpha \wvec - \beta \Phimat^T \Phimat \wvec + \beta \Phimat^T \tvec = 0 
-		  \end{align*}
-		  
-		  \begin{align*}
-		  	(\alpha \eye + \beta \Phimat^T \Phimat)\wvec = \beta \Phimat^T \tvec
-		  \end{align*}
-		  
-		  \begin{align*}
-		  	\wvecMAP &= (\alpha \eye + \beta \Phimat^T \Phimat)^{-1} \beta \Phimat^T \tvec \\
-		  	&=(\beta (\frac{\alpha}{\beta} \eye + \Phimat^T\Phimat))^{-1} \beta \Phimat^T \tvec \\
-		  	&= \frac{1}{\beta}(\lambda \eye + \Phimat^T\Phimat)^{-1}\Phimat^T \tvec
+		  \wvecMAP &= (\alpha \eye + \beta \Phimat^T \Phimat)^{-1} \beta \Phimat^T \tvec \\
+		  &=(\beta (\frac{\alpha}{\beta} \eye + \Phimat^T\Phimat))^{-1} \beta \Phimat^T \tvec \\
+		  &= \frac{1}{\beta}(\lambda \eye + \Phimat^T\Phimat)^{-1}\Phimat^T \tvec
 		  \end{align*}
   
   \item {\bf BONUS}~~~Our prior for $\wvec$ assumes the same marginal distribution for each entry in $\wvec$, including that of the first basis function $\phivec_0 = 1$.  What is the role this basis function?  Why should we avoid placing the same penalty/prior for this basis?  Rewrite $p(\wvec)$ so that the first basis function has its own prior/penalty. \\
 	  \emph{Solution:} \\
-		  The constant basis function acts as a bias or offset for the regression problem. If we use the same prior for this weight as for the others, we are assuming that the offset from the y-axis should somehow be penalized. This does not make too much sense a priori, so instead we use a different precision for this basis function, i.e. $\alpha_0 << \alpha$, while using $\alpha$ for all the others.
+		  %The constant basis function acts as a bias or offset for the regression problem. If we use the same prior for this weight as for the others, we are assuming that the offset from the y-axis should somehow be penalized. This does not make too much sense a priori, so instead we use a different precision for this basis function, i.e. $\alpha_0 << \alpha$, while using $\alpha$ for all the others.
   
 \end{enumerate}
 
@@ -279,83 +361,126 @@ For these questions you will be working with different probability density funct
 \subsection{Question}
 For each of the probability distributions above, write down their normalizing constants.  Remember that $\int p(x|\theta) d x = 1$ for continuous $x$ and $\sum_x p(x| \theta) = 1$ for discrete $x$.  \\
 	\emph{Solution:} \\
-			\begin{enumerate}
-				\item{Bernouilli} \\
-				There is no normalizing constant in this case
-				
-				\item{Beta}
-				\begin{align*}
-					= \frac{\Gamma (\theta_1 + \theta_0)}{\Gamma (\theta_1) \Gamma (\theta_0)}
-				\end{align*}
-				
-				\item{Poisson}
-				\begin{align*}
-					= \exp^{\theta}
-				\end{align*}
-				
-				\item{Gamma}
-				\begin{align*}
-					= \frac{\theta_{1}^{\theta_{0}}}{\Gamma (\theta_{0})}
-				\end{align*}
-				
-				\item{Gaussian}
-				\begin{align*}
-					= \frac{1}{\sqrt[]{2\pi \theta_{1}}}
-				\end{align*}
-				
-			\end{enumerate}
+		The normalizing constants are those terms which do not depend on $x$, but that help to mantain the sum of the probabilities for all $x$ equal to $0$. Hereby we state the constants for the distributions given: \\
+		
+		\begin{enumerate}
+			\item{Bernouilli} \\
+			There is no normalizing constant in this case, since $X \in \{1,0\}$ and its probabilities are complementary.
+			
+			\item{Beta}
+			\begin{align*}
+			\frac{\Gamma (\theta_1 + \theta_0)}{\Gamma (\theta_1) \Gamma (\theta_0)}
+			\end{align*}
+			
+			\item{Poisson}
+			\begin{align*}
+			\exp^{\theta}
+			\end{align*}
+			
+			\item{Gamma}
+			\begin{align*}
+			\frac{\theta_{1}^{\theta_{0}}}{\Gamma (\theta_{0})}
+			\end{align*}
+			
+			\item{Gaussian}
+			\begin{align*}
+			\frac{1}{\sqrt[]{2\pi \theta_{1}}}
+			\end{align*}
+			
+		\end{enumerate}
 
 \subsection{Question}
 You live in Amsterdam and find that it rains quite a lot.  You want to estimate the probability that it will rain any given day of the year.  Every month for a year you count the number of days with rain, and you get the following (from January to December): 22,19,16,16,14,14,17,18,19,20,21,21 (for a grand total of 217 days with rain).\footnote{Source: \url{http://www.amsterdam.climatemps.com/}.}  Let $r_t$ be an observation for day $t$ in the year; $r_t=1$ means there was some rain on day $t$, $r_t=0$ means there was no rain.  We want to estimate the parameter $\rho$, the probability of rain on any day of the year.  We assume a Bernouilli distribution for the observations $\{r_t\}_{t=1}^{365}$, that is $p( r_t | \rho ) = \text{Bernouilli}(r_t | \rho)$.  To answer these questions, the number of days of rain per month is not important, only the total for the year is relevant.  With this information, answer the following questions:
 \begin{enumerate}
   \item What is the likelihood for a single observation?  For the entire set of observations? \\
 	  \emph{Solution:} \\
+		  The likelihood of a single observation is: \\
 		  \begin{align*}
-		  	p(r_t | \rho) = \rho^{r_t} (1 - \rho)^{1 - r_t}
+		  p(r_t | \rho) = \rho^{r_t} (1 - \rho)^{1 - r_t}
 		  \end{align*}
 		  
+		  Then, we find the probability of the whole set, representing it as the product of single observations. Using matrix notation we get: \\
+		  
 		  \begin{align*}
-		  	p(\rvec | \rho) &= \prod_{t = 1}^{T} \rho^{r_t} (1 - \rho)^{1 - r_t} \\
-		  	&= \rho^{\sum_{t = 1}^{T} r_t} (1 - \rho)^{\sum_{t = 1}^{T} 1 - r_t} \\
-		  	&= \rho^{n_1} (1 - \rho)^{n_0}
+		  p(\rvec | \rho) &= \prod_{t = 1}^{T} \rho^{r_t} (1 - \rho)^{1 - r_t} \\
+		  &= \rho^{\sum_{t = 1}^{T} r_t} (1 - \rho)^{\sum_{t = 1}^{T} 1 - r_t} \\
+		  &= \rho^{n_1} (1 - \rho)^{n_0}
 		  \end{align*}
-  
+		  
+		  Where: \\
+		  
+		  \begin{align*}
+		  \underbrace{n_1}_{\text{days with rain}} &= \sum_{t = 1}^{T} r_t \\ 
+		  \underbrace{n_0}_{\text{days without rain}} &= \sum_{t = 1}^{T} 1 - r_t
+		  \end{align*}
   
   \item Write the log-likelihood for the entire set of observations.  \\
 	  \emph{Solution:} \\
+		  Using the logarithm arithmetic rules, we get: \\
+		  
 		  \begin{align*}
-		  	\ln p(\rvec | \rho) &= n_1 \ln \rho + n_0 \ln (1 - \rho)
+		  \ln p(\rvec | \rho) &= \ln \rho^{n_1} (1 - \rho)^{n_0} \\ \\
+		  &= ln \rho^{n_1} + \ln (1 - \rho)^{n_0} \\ \\
+		  &= n_1 \ln \rho + n_0 \ln (1 - \rho)
 		  \end{align*}
   
   \item Solve for the MLE of $\rho$.  Do it in general (with symbols for counts $n_0$, $n_1$ for days without and with rain) and for this specific case (plug-in the numbers).\\
 	  \emph{Solution:} \\
+		  In order to compute the MLE, first we find the derivative of the loglikelihood, and set it to $0$. \\
+		  
 		  \begin{align*}
-		  	\frac{\partial \ln p(\rvec | \rho)}{\partial \rho} &= \frac{n_1}{\rho} + \frac{n_0}{1 - \rho} (-1) = 0 \\
-		  	\frac{n_1}{\rho} &= \frac{n_0}{1 - \rho} \\
-		  	n_1 - n_1 \rho &= n_0 \rho \\
-		  	\rho &= \frac{n_1}{N} \\
-		  	&= 217 / 365
+		  \frac{\partial \ln p(\rvec | \rho)}{\partial \rho} &= \frac{n_1}{\rho} + \frac{n_0}{1 - \rho} (-1) = 0 \\
+		  \end{align*}
+		  
+		  Then, we find the value of $\rho$
+		  
+		  \begin{align*}
+		  \frac{n_1}{\rho} &= \frac{n_0}{1 - \rho} \\ \\
+		  n_1 - n_1 \rho &= n_0 \rho \\ \\
+		  \rho &= \frac{n_1}{N}
+		  \end{align*}
+		  
+		  Plugin in the number, we have: 
+		  
+		  \begin{align*}
+		  \rho &= 217 / 365
 		  \end{align*}
   
   \item Assume a Beta prior for $\rho$ with parameters $a$ and $b$.  What is the MAP for $\rho$? \\
 	  \emph{Solution:} \\
+		  We follow the same procedure, but this time for the posterior, given by: \\        
+		  
 		  \begin{align*}
-		  	f = \ln p(\rho | \rvec) &\propto \ln p(\rho | \rvec) + \ln p(\rho) \\
-		  	&= n_1 \ln \rho + n_0 \ln(1 - \rho) + (a - 1) \ln \rho + (b - 1) \ln(1 - \rho)
+		  f = \ln p(\rho | \rvec) &\propto \ln p(\rho | \rvec) + \ln p(\rho) \\
+		  &= n_1 \ln \rho + n_0 \ln(1 - \rho) + (a - 1) \ln \rho + (b - 1) \ln(1 - \rho)
 		  \end{align*}
+		  
+		  We first find the derivative and set it to $0$.
+		  
 		  \begin{align*}
-		  	\frac{\partial f}{\partial{\rho}} &= \frac{n_1}{\rho}-\frac{n_0}{1-\rho}+\frac{a -1}{\rho}-\frac{b-1}{1-\rho} = 0\\
-		  	&\rho= \frac{n_1 + a -1}{N + a +b -2}
-		  \end{align*}
+		  \frac{\partial f}{\partial{\rho}} &= \frac{n_1}{\rho}-\frac{n_0}{1-\rho}+\frac{a -1}{\rho}-\frac{b-1}{1-\rho} = 0\\
+		  \end{align*}  
+		  
+		  Then we solve for $\rho$
+		  
+		  \begin{align*}
+		  &\rho= \frac{n_1 + a -1}{N + a +b -2}
+		  \end{align*} 
   
   
   \item Write the form of the posterior distribution for $\rho$?  You do not need to solve it analytically. \\
 	  \emph{Solution:} \\
+		  Using Bayes Theorem, we have: \\
 		  \begin{align*}
-		  	p(\rho\vert\textbf{r}) &= p(\textbf{r}\vert\rho)p(\rho) \\
-		  	&= \frac{\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}}{\int\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}dp} \\
-		  	&=\frac{\Gamma(\mathcal{N}+a+b)}{\Gamma(n_1+a)\Gamma(n_0+b)}\rho^{n_1+a-1}(1-\rho)^{n_0+b-1} \\
-		  	&= \mathcal{B}(\rho \vert a +n_1,b + n_0)
+		  p(\rho\vert\textbf{r}) &= \frac{p(\textbf{r}\vert\rho)p(\rho)}{p(\textbf{r})} \\ \\
+		  \end{align*} 
+		  
+		  Substituting with the specifics of this problem, we get: \\ 
+		  
+		  \begin{align*}
+		  p(\rho\vert\textbf{r}) &= \frac{\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}}{\int\rho^{n_1+a-1}(1-\rho)^{n_0+b-1}dp} \\ \\
+		  &=\frac{\Gamma(\mathcal{N}+a+b)}{\Gamma(n_1+a)\Gamma(n_0+b)}\rho^{n_1+a-1}(1-\rho)^{n_0+b-1} \\ \\
+		  &= \mathcal{B}(\rho \vert a +n_1,b + n_0)
 		  \end{align*} 
   
   
@@ -371,17 +496,24 @@ You work in the staffing department of a maternity hospital and part of your job
 \begin{enumerate}
   \item What is the likelihood for a single observation?  For the entire set of observations? \\
 	  \emph{Solution:} \\
+		  The likelihood of a single observation is: \\
 		  \begin{align*}
-		  	&p(d_t\vert \lambda) = \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
-		  	p(\textbf{d} \vert \lambda)&=\prod_{t=1}^{T} \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
-		  	&=\frac{\lambda^{\sum_{t=1}^{T}d_t}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda) \\
-		  	&=\frac{\lambda^{n}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda)
+		  &p(d_t\vert \lambda) = \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
 		  \end{align*}
+		  
+		  Then, we find the probability of the whole set, representing it as the product of single observations. Using matrix notation we get: \\
+		  \begin{align*}      
+		  p(\textbf{d} \vert \lambda)&=\prod_{t=1}^{T} \frac{\lambda^{d_t}}{d_t!}\exp(-\lambda) \\
+		  &=\frac{\lambda^{\sum_{t=1}^{T}d_t}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda) \\
+		  &=\frac{\lambda^{n}}{\prod_{t=1}^{T}d_t!}\exp(-T\lambda)
+		  \end{align*} 
   
   \item Write the log-likelihood for the entire set of observations. \\
 	  \emph{Solution:} \\
+		  Using the logarithm arithmetic rules, we get: \\        
+		  
 		  \begin{align*}
-		  	\ln p(\textbf{d}\vert\lambda) = n\ln\lambda - T \lambda - \sum_{t=1}^{T}\ln(d_t!)
+		  \ln p(\textbf{d}\vert\lambda) = n\ln\lambda - T \lambda - \sum_{t=1}^{T}\ln(d_t!)
 		  \end{align*}
   
    
@@ -481,6 +613,8 @@ Assume we know $p(d=0) = \pi_0 = 0.999$ and $p(d=1) = \pi_1 = 0.001$ from previo
 		      	p(d = 1 | l_{\star}) = \frac{1}{1 + \exp ^{-a(l_{\star})}} 
 		      	&= \frac{1}{1 + \frac{\pi_0 \mathcal{N} (l_{\star} | \mu_{0}, \sigma_{0}^{2})}{\pi_1 \mathcal{N} (l_{\star} | \mu_{1}, \sigma_{1}^{2})}} \\
 		      \end{align*}
+		      
+		  Since we know the Normal distribution has a sigmoid form, this last solution has the desired form. 
    
   
 \end{enumerate}
