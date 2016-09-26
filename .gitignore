@@ -3,3 +3,4 @@
 *.bbl
 *.blg
 *.synctex.gz
+mnist.pkl.gz
