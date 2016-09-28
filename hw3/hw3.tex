@@ -6,6 +6,7 @@
 \usepackage{url}
 \usepackage[compact,explicit]{titlesec}
 \usepackage{enumitem}
+\usepackage{verbatim}
 
 \newcommand{\lp}{\left(}
 \newcommand{\rp}{\right)}
@@ -176,76 +177,105 @@
 		\emph{Solution:} \\
 		
 		\begin{align*}
-		p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \prod_{n=1}^{N}(\pi_1 \prod_{d=1}^{D}p(x_nd | \theta_1))^{1 - t_n} (\pi_2 \prod_{d=1}^{D}p(x_nd | \theta_2))^{t_n} \\
+			p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \prod_{n=1}^{N}(\pi_1 \prod_{d=1}^{D}p(x_nd | \theta_1))^{1 - t_n} (\pi_2 \prod_{d=1}^{D}p(x_nd | \theta_2))^{t_n} \\
 		\end{align*}		  
 		
 		\item Write down the likelihood for the Poisson model. \\
 		\emph{Solution:} \\
+		We substitute the general probability expression for the Poisson distribution:
 		
 		\begin{align*}
-		p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \prod_{n=1}^{N}(\pi_1 \prod_{d=1}^{D}\frac{\lambda_{d1}^{x_nd}}{x_nd!}\exp(-\lambda_{d1}))^{1 - t_n} (\pi_2 \prod_{d=1}^{D}\frac{\lambda_{d2}^{x_nd}}{x_nd!}\exp(-\lambda_{d2}))^{t_n}\\
+			p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \prod_{n=1}^{N}(\pi_1 \prod_{d=1}^{D}\frac{\lambda_{d1}^{x_nd}}{x_nd!}\exp(-\lambda_{d1}))^{1 - t_n} (\pi_2 \prod_{d=1}^{D}\frac{\lambda_{d2}^{x_nd}}{x_nd!}\exp(-\lambda_{d2}))^{t_n}\\
 		\end{align*}
 		
 		\item Write down the log-likelihood for the Poisson model. \\
 		\emph{Solution:} \\
+		Taking the logarithm of the likelihood, we get:
 		
 		\begin{align*}
-		\ln p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \sum_{n \in C_1}^{N}(\ln\pi_1 + \sum_{d = 1}^{D}x_{nd}\ln\lambda_{d1} - \ln(x_{nd}!) - \lambda_{d1}) \\
-		&+ \sum_{n \in C_2}^{N}(\ln\pi_2 + \sum_{d=1}^{D} x_{nd}\ln\lambda_{d2} - \ln(x_{nd}!) - \lambda_{d2}) \\
+			\ln p(\textbf{T},\textbf{X} | \boldsymbol{\theta}) &= \sum_{n \in C_1}^{N}(\ln\pi_1 + \sum_{d = 1}^{D}x_{nd}\ln\lambda_{d1} - \ln(x_{nd}!) - \lambda_{d1}) \\
+			&+ \sum_{n \in C_2}^{N}(\ln\pi_2 + \sum_{d=1}^{D} x_{nd}\ln\lambda_{d2} - \ln(x_{nd}!) - \lambda_{d2}) \\
 		\end{align*}
 		
 		\item Solve for the MLE estimators for $\lambda_{dk}$ \\
 		\emph{Solution:} \\
+		The MLE estimator is found by finding the partial derivative of the log-likelihood over $\lambda_{dk}$ and setting it to $0$. In this case it is simple because most of the terms are independent from $\lambda_{dk}$
 		
 		\begin{align*}
-		\frac{\partial \ln p(\textbf{T},\textbf{X} | \boldsymbol{\theta})}{\partial \lambda_{dk}} &= \sum_{n \in C_k}^{N}(\frac{x_{nd}}{\lambda_{dk}} - 1) = 0 \\
-		\sum_{n \in C_k}^{N} \frac{x_{nd}}{\lambda_{dk}} &= \sum_{n \in C_k}^{N} 1 \\
-		\lambda_{dk} &= \frac{1}{N_k} \sum_{n \in C_k}^{N} x_{nd}\\
+			\frac{\partial \ln p(\textbf{T},\textbf{X} | \boldsymbol{\theta})}{\partial \lambda_{dk}} &= \sum_{n \in C_k}^{N}(\frac{x_{nd}}{\lambda_{dk}} - 1) = 0
 		\end{align*}
 		
-		I.e $\lambda_{dk}$ is the average number of word/token \textit{d} per email or class \textit{k}.      
+		Solving for $\lambda_{dk}$, we get:
+		
+		\begin{align*}
+			\sum_{n \in C_k}^{N} \frac{x_{nd}}{\lambda_{dk}} &= \sum_{n \in C_k}^{N} 1 \\
+			\frac{1}{\lambda_{dk}} \sum_{n \in C_k}^{N}x_{nd} &= N_k \\
+			\lambda_{dk} &= \frac{1}{N_k} \sum_{n \in C_k}^{N} x_{nd}\\
+		\end{align*}
+		
+		$\lambda_{dk}$ represents the average number of word \textit{d} per class \textit{k}.      
 		
 		\item Write $p(\class_{1} | \xvec)$ for the general two class naive Bayes classifier.\\
 		\emph{Solution:} \\
-		
 		\begin{align*}
-		p(\class_{1} | \xvec) &= \frac{\pi_1 \prod_{d = 1}^{D}p(x_{nd}\theta_1)}{\pi_1 \prod_{d = 1}^{D}p(x_{nd}\theta_1) + \pi_2 \prod_{d = 1}^{D}p(x_{nd}\theta_2)}
+			p(\class_{1} | \xvec) &= \frac{\pi_1 \prod_{d = 1}^{D}p(x_{nd}\theta_1)}{\pi_1 \prod_{d = 1}^{D}p(x_{nd}\theta_1) + \pi_2 \prod_{d = 1}^{D}p(x_{nd}\theta_2)}
 		\end{align*}
 		
 		\item Write $p(\class_{1} | \xvec)$ for the Poisson model. \\
 		\emph{Solution:} \\
+		Again, substituting the Poisson distribution model:
 		
 		\begin{align*}
-		p(\class_{1} | \xvec) &= \frac{\pi_1 \prod_{d = 1}^{D} \lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})} {\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1}) + \pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}\\
+			p(\class_{1} | \xvec) &= \frac{\pi_1 \prod_{d = 1}^{D} \frac{\lambda_{d1}^{x_{nd}}}{x_nd!} \exp(-\lambda_{d1})} {\pi_1 \prod_{d = 1}^{D} \frac{\lambda_{d1}^{x_{nd}}}{x_nd!} \exp(-\lambda_{d1}) + \pi_2 \prod_{d=1}^{D} \frac{\lambda_{d2}^{x_{nd}}}{x_nd!} \exp(-\lambda_{d2})} \\\\
+			&= \frac{ \lp \prod_{d=1}^{D}\frac{1}{x_nd!} \rp\pi_1 \prod_{d = 1}^{D} \lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})} {\lp \prod_{d=1}^{D}\frac{1}{x_nd!} \rp \pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1}) + \pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})} \\\\
+			&= \frac{\pi_1 \prod_{d = 1}^{D} \lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})} {\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1}) + \pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}\\
 		\end{align*}	
-		Notice the product over count factorial cancels because it is a constant for each class.
 		
 		\item Rewrite $p(\class_{1} | \xvec)$ as a sigmoid $\sigmoid(a) = \frac{1}{1 + \exp(-a)}$ ; solve for $a$ for the Poisson model. \\
 		\emph{Solution:} \\
 		
 		\begin{align*}
-		p(\class_{1} | \xvec) &= \frac{1} {1 + \frac{\pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}{\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})}} \\
-		&= \frac{1}{1 + \exp(-\alpha)}\\
-		\alpha &= \underbrace{\sum_{d=1}^{D} x_{nd} \ln\frac{\lambda_{d1}}{\lambda_{d2}}}_{w^{T} x_n}  + \underbrace{\ln \frac{\pi_1}{\pi_2} - \sum_{d=1}^{D}(\lambda_{d1} - \lambda_{d2})}_{w_0} \\
+			p(\class_{1} | \xvec) &= \frac{1}{1 + \exp(-\alpha)}\\
+			&= \frac{1} {1 + \frac{\pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}{\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})}} \\
+		\end{align*}
+		
+		Solving for $\alpha$
+		
+		\begin{align*}
+			\exp(-\alpha) &= \frac{\pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}{\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})}\\\\
+			\ln \lp \exp(-\alpha) \rp &= \ln \lp \frac{\pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2})}{\pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1})} \rp \\\\
+			-\alpha &= \ln \lp \pi_2 \prod_{d=1}^{D}\lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2}) \rp - \ln \lp \pi_1 \prod_{d = 1}^{D}\lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1}) \rp \\\\
+			\alpha &= \ln \lp \pi_1 \rp + \sum_{d = 1}^{D} \ln \lp \lambda_{d1}^{x_{nd}} \exp(-\lambda_{d1}) \rp - \ln \lp \pi_2 \rp - \sum_{d=1}^{D}\ln \lp \lambda_{d2}^{x_{nd}} \exp(-\lambda_{d2}) \rp  \\\\
+			\alpha &= \ln \lp \pi_1 \rp + \sum_{d = 1}^{D} \ln \lp \lambda_{d1}^{x_{nd}} \rp + \sum_{d = 1}^{D} -\lambda_{d1} - \ln \lp \pi_2 \rp - \sum_{d=1}^{D} \ln \lp \lambda_{d2}^{x_{nd}} \rp - \sum_{d=1}^{D} -\lambda_{d2}  \\\\
+			\alpha &= \ln \frac{\pi_1}{\pi_2} + \sum_{d=1}^{D} x_{nd} \ln\frac{\lambda_{d1}}{\lambda_{d2}} - \sum_{d=1}^{D}(\lambda_{d1} - \lambda_{d2}) \\
 		\end{align*}
 		
 		\item Assume $a = \wvec^{T}x + w_{0}$; solve for $\wvec$ and $w0$. \\
 		\emph{Solution:} \\
+		Gathering terms dependent on $x$, and rearranging:
 		
-		See above. $w_d = \ln\frac{\lambda_{d1}}{\lambda_{d2}}$
+		\begin{align*}
+			\alpha &= \underbrace{\sum_{d=1}^{D} x_{nd} \ln\frac{\lambda_{d1}}{\lambda_{d2}}}_{w^{T} x_n}  + \underbrace{\ln \frac{\pi_1}{\pi_2} - \sum_{d=1}^{D}(\lambda_{d1} - \lambda_{d2})}_{w_0} \\
+		\end{align*}
+		
+		Then: 
+		\begin{align*}
+			w_d = \ln\frac{\lambda_{d1}}{\lambda_{d2}}
+		\end{align*}
+		
 		
 		\item Is the decision boundary a linear function of $\xvec$? Why? \\
 		\emph{Solution:} \\
+		Since $w_0$ is a constant for all x, then the decision boundary is linear
 		
-		Yes: $\alpha$ is a linear function of x ($w_0$ is a constant for all x)
 	\end{enumerate}
 	
 	\vspace{0.25in}
 	\section{Multi-class Logistic Regression}
 	For $K > 2$ the posterior probabilities take a generalized form of the sigmoid called the softmax:
 	\begin{align*}
-	y_{k}(\phivec) = p(\class_{k} | \phivec ) &=
-	\frac{\exp(a_{k})}{\sum_i \exp(a_{i})}
+		y_{k}(\phivec) = p(\class_{k} | \phivec ) &=
+		\frac{\exp(a_{k})}{\sum_i \exp(a_{i})}
 	\end{align*}
 	where $a_{k} = \wvec_{k}^{T} \phivec$
 	
@@ -255,63 +285,63 @@
 		\emph{Solution:} \\
 		
 		\begin{align*}
-		\frac{\partial y_k(\phivec)}{\partial \wvec_j} &= \frac{\partial}{\partial \wvec_j} \lp \frac{\exp(a_k)}{\sum_i \exp(a_i)} \rp \\\\
-		&= \frac{\exp(a_k)}{\sum_i \exp(a_i)} \frac{\partial a_k}{\partial \wvec_j} - \frac{\exp(a_k) \exp(a_j)}{\lp \sum_i \exp(a_i) \rp^2}  \frac{\partial a_k}{\partial \wvec_j} \\\\
-		&= [k = j] \frac{\exp(a_k)}{\sum_i \exp(a_i)} \phivec - \frac{\exp(a_k)}{\sum_i \exp(a_i)} \frac{\exp(a_j)}{\sum_i \exp(a_i)} \phivec \\\\
-		&= \frac{\exp(a_k)}{\sum_i \exp(a_i)} \lp [k = j] - \frac{\exp(a_j)}{\sum_i \exp(a_i)} \rp \phivec \\\\
-		&= y_k(\phivec) \lp \eye_{kj} - y_j(\phivec) \rp \phivec
+			\frac{\partial y_k(\phivec)}{\partial \wvec_j} &= \frac{\partial}{\partial \wvec_j} \lp \frac{\exp(a_k)}{\sum_i \exp(a_i)} \rp \\\\
+			&= \frac{\exp(a_k)}{\sum_i \exp(a_i)} \frac{\partial a_k}{\partial \wvec_j} - \frac{\exp(a_k) \exp(a_j)}{\lp \sum_i \exp(a_i) \rp^2}  \frac{\partial a_k}{\partial \wvec_j} \\\\
+			&= [k = j] \frac{\exp(a_k)}{\sum_i \exp(a_i)} \phivec - \frac{\exp(a_k)}{\sum_i \exp(a_i)} \frac{\exp(a_j)}{\sum_i \exp(a_i)} \phivec \\\\
+			&= \frac{\exp(a_k)}{\sum_i \exp(a_i)} \lp [k = j] - \frac{\exp(a_j)}{\sum_i \exp(a_i)} \rp \phivec \\\\
+			&= y_k(\phivec) \lp \eye_{kj} - y_j(\phivec) \rp \phivec
 		\end{align*}		  
 		
 		\item Write down the likelihood as a product over $N$ and $K$ then write down the log-likelihood. Use the entries of $\textbf{T}$ as selectors of the correct class. \\
 		\emph{Solution:} \\
 		The likelihood is written as:
 		\begin{align*}
-		p(\Tmat | \phivec, \Wmat) &= \prod_{n=1}^N \prod_{k=1}^K p(\class_k | \phivec_n)^{t_{nk}} \\\\
-		&= \prod_{n=1}^N \prod_{k=1}^K \lp y_k(\phivec) \rp^{t_{nk}} \\\\
-		&= \prod_{n=1}^N \prod_{k=1}^K \lp \frac{\exp(a_k)}{\sum_i^K \exp(a_i)} \rp^{t_{nk}} 
+			p(\Tmat | \phivec, \Wmat) &= \prod_{n=1}^N \prod_{k=1}^K p(\class_k | \phivec_n)^{t_{nk}} \\\\
+			&= \prod_{n=1}^N \prod_{k=1}^K \lp y_k(\phivec) \rp^{t_{nk}} \\\\
+			&= \prod_{n=1}^N \prod_{k=1}^K \lp \frac{\exp(a_k)}{\sum_i^K \exp(a_i)} \rp^{t_{nk}} 
 		\end{align*}
 		
 		The log-likelihood is written as:
 		\begin{align*}
-		\ln p(\Tmat | \phivec, \Wmat) &= \ln \lp \prod_{n=1}^N \prod_{k=1}^K p(\class_k | \phivec_n)^{t_{nk}} \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln y_k(\phivec) \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln \frac{\exp(a_k)}{\sum_i^K \exp(a_i)} \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln \exp(a_k) - \ln \sum_i^K \exp(a_i) \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \lp a_k - \ln \sum_i^K \exp(a_i) \rp \rp
+			\ln p(\Tmat | \phivec, \Wmat) &= \ln \lp \prod_{n=1}^N \prod_{k=1}^K p(\class_k | \phivec_n)^{t_{nk}} \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln y_k(\phivec) \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln \frac{\exp(a_k)}{\sum_i^K \exp(a_i)} \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln \exp(a_k) - \ln \sum_i^K \exp(a_i) \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \lp a_k - \ln \sum_i^K \exp(a_i) \rp \rp
 		\end{align*}
 		
 		\item Derive the gradient of the log-likelihood with respect to $\wvec_{j}$. \\
 		\emph{Solution:} \\
 		
 		\begin{align*}
-		\frac{\partial \ln p(\Tmat | \phivec, \Wmat)}{\partial \wvec_j} &= \frac{\partial \lp \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln y_k(\phivec_n) \rp \rp}{\partial \wvec_j} \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \frac{1}{y_k(\phivec_n)} \frac{\partial y_k(\phivec_n)}{\partial \wvec_j} \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp \frac{t_{nk}}{y_k(\phivec_n)} y_k(\phivec_n) \lp \eye_{kj} - y_j(\phivec_n) \rp \phivec_n \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \lp \eye_{kj} - y_j(\phivec_n) \rp \phivec_n \rp \\\\
-		&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \eye_{kj} \phivec_n \rp - \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} y_j(\phivec_n) \phivec_n \rp \\\\
-		&= \sum_{n=1}^N \phivec_n \sum_{k=1}^K \lp t_{nk} \eye_{kj} \rp - \sum_{n=1}^N y_j(\phivec_n) \phivec_n \sum_{k=1}^K t_{nk} \\\\
-		&= \sum_{n=1}^N \phivec_n  t_{nj} - \sum_{n=1}^N y_j(\phivec_n) \phivec_n \\\\
-		&= \sum_{n=1}^N \lp \lp  t_{nj} -  y_j(\phivec_n) \rp \phivec_n \rp
+			\frac{\partial \ln p(\Tmat | \phivec, \Wmat)}{\partial \wvec_j} &= \frac{\partial \lp \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \ln y_k(\phivec_n) \rp \rp}{\partial \wvec_j} \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \frac{1}{y_k(\phivec_n)} \frac{\partial y_k(\phivec_n)}{\partial \wvec_j} \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp \frac{t_{nk}}{y_k(\phivec_n)} y_k(\phivec_n) \lp \eye_{kj} - y_j(\phivec_n) \rp \phivec_n \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \lp \eye_{kj} - y_j(\phivec_n) \rp \phivec_n \rp \\\\
+			&= \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} \eye_{kj} \phivec_n \rp - \sum_{n=1}^N \sum_{k=1}^K \lp t_{nk} y_j(\phivec_n) \phivec_n \rp \\\\
+			&= \sum_{n=1}^N \phivec_n \sum_{k=1}^K \lp t_{nk} \eye_{kj} \rp - \sum_{n=1}^N y_j(\phivec_n) \phivec_n \sum_{k=1}^K t_{nk} \\\\
+			&= \sum_{n=1}^N \phivec_n  t_{nj} - \sum_{n=1}^N y_j(\phivec_n) \phivec_n \\\\
+			&= \sum_{n=1}^N \lp \lp  t_{nj} -  y_j(\phivec_n) \rp \phivec_n \rp
 		\end{align*}
 		
 		\item What is the objective function we minimize that is equivalent to maximizing the log-likelihood? \\
 		\emph{Solution:} \\
 		The objective function is the \textit{cross-entropy error} $(E(\textbf{W}))$ and is equal to the negative log-likelihood. I.e.: 
 		\begin{align*}
-		E(\textbf{W}) &= -\ln p(\textbf{T}|\boldsymbol{\Phi},\textbf{W}) = - \sum_{n=1}^{N}\sum_{k=1}^{K} t_{nk} \ln y_k(\phi_n)
+			E(\textbf{W}) &= -\ln p(\textbf{T}|\boldsymbol{\Phi},\textbf{W}) = - \sum_{n=1}^{N}\sum_{k=1}^{K} t_{nk} \ln y_k(\phi_n)
 		\end{align*}
 		\\
 		Sometimes we may write $y_{nk}$ for $y_k(\phi_n)$; it is useful sometimes to give clutter-free solutions. Minimizing the cross-entropy requires the same gradients as maximizing the log-likelihood, except there is a change in sign:
 		\begin{align*}
-		\frac{\partial E(\textbf{W})}{\partial \textbf{w}_j} &= \sum_{n=1}^{N}\sum_{k=1}^{K} (y_{nj} - t_{nj})\phi_n \\
-		&= \sum_{n=1}^{N} e_n
+			\frac{\partial E(\textbf{W})}{\partial \textbf{w}_j} &= \sum_{n=1}^{N}\sum_{k=1}^{K} (y_{nj} - t_{nj})\phi_n \\
+			&= \sum_{n=1}^{N} e_n
 		\end{align*}
 		
 		\item Write a stochastic gradient algorithm for logistic regression using this objective function. Make sure to include indices for time and to define the learning rate. The gradients may differ in sign switching from maximizing to minimizing; don't overlook this.\\
 		\emph{Solution:} \\
 		The single step update for SGD is:		    
 		\begin{align*}
-		w_j^{t+1} &= w_j^{t} - \eta^{t} \nabla e_n
+			w_j^{t+1} &= w_j^{t} - \eta^{t} \nabla e_n
 		\end{align*}
 		
 		\begin{enumerate}[label=(\alph*)]
@@ -325,6 +355,8 @@
 			\end{enumerate}
 			\item Return \textbf{W}
 		\end{enumerate}
+		
+		\begin{comment}
 		
 		\item Explain why is this a stochastic optimization procedure?. \\
 		\emph{Solution:} \\
@@ -346,6 +378,7 @@
 		
 		Optimizing the cross entropy for $\Wmat$ is equivalent to optimizing the log-likelihood, which is also the log posterior. As such, optimizing the previous objective can be seen as the maximum-a-posterior estimator. 
 		
+		\end{comment}
 	\end{enumerate}
 	
 \end{document}
