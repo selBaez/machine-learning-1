@@ -163,12 +163,70 @@
 \begin{document}
 	\maketitle
 	\titleformat{\section}[runin]{\large\bfseries}{}{0pt}{\thesection\quad\underline{#1}\vspace{0.1in}\newline}
-	\titleformat{\subsection}[runin]{\normalsize\bfseries}{}{0pt}{#1 \thesubsection\newline}
+	\titleformat{\subsection}[runin]{\normalsize\bfseries}{}{0pt}{ \thesubsection\quad #1 \newline}
 	
-	\vspace{0.25in}
-	\section{Intro}
+\vspace{0.25in}
+%\section{THINGS WE NEED TO KNOW}
+\centerline{\textbf{THINGS WE NEED TO KNOW}}
+	\begin{enumerate}
+		\item Probability:
+			\begin{itemize}
+				\item Variable representation
+				\item Conditional probability (Bayes Theorem)
+				\item Likelihood
+				\item Prior
+				\item Normalization constant
+				\item Marginalization
+			\end{itemize}
+				\item Conditional models
+				\begin{itemize}
+					\item Objective function
+					\item Maximum log-likelihood (MLE)
+					\item Maximum posterior (MAP)
+					\item Training ans test errors as a function of $M$
+					\item Overfitting
+					\item Underfitting				
+				\end{itemize}
+		\item Classification
+			\begin{itemize}
+				\item Optimal Bayesian decision rule
+				\item Loss function
+			\end{itemize}
+		\item Regularization (Theory)
+			\begin{itemize}
+				\item Bias
+				\item Variance
+				\item Approximation of bias and variance
+			\end{itemize}
+		\item Conditional classification
+			\begin{itemize}
+				\item General expression for $p(\class_2 | x)$
+				\item Conditions for classifying $x$ as $\class_1$ (inequality)
+				\item Decision boundary
+			\end{itemize}
+		\item Regression
+			\begin{itemize}
+				\item Linear vs logistic functions
+				\item Stochastic gradient descent algorithm
+			\end{itemize}
+		\item Bayesian linear regression
+			\begin{itemize}
+				\item Posterior distributions
+				\item Likelihood 
+				\item Posterior predictive distribution
+			\end{itemize}
+		\item General
+			\begin{itemize}
+				\item Gaussian distribution and its parameters
+				\item Conversion from matrix to scalars
+			\end{itemize}
+	\end{enumerate}
+
+\newpage
+
+\section{Intro}
 	
-	\subsection{Notation}
+\subsection{Notation}
 	\begin{enumerate}
 		\item $N$: number of data samples
 		\item $D$: dimensionality of input data
@@ -176,7 +234,7 @@
 		\item $x_n$: row vector for $n^{th}$ sample
 	\end{enumerate}
 	
-	\subsection{Models, Algorithms, etc}
+\subsection{Models, Algorithms, etc}
 	A model:
 	\begin{itemize}
 		\item Belongs to a \texttt{model class}, with corresponding \texttt{complexity}
@@ -184,6 +242,7 @@
 		\item is optimized by minimizing/maximizing an \texttt{objective function}
 		
 	\end{itemize} 
+
 
 	
 \end{document}
