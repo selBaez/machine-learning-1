@@ -1,0 +1,257 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[compact,explicit]{titlesec}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\newcommand\ie{\textit{i.e.\ }}
+\newcommand\eg{\textit{e.g.\ }}
+
+\title{Machine Learning 1 - Homework 4}
+\author{Selene Baez Santamaria}
+
+%\author{Monday, October 03, 2016 \\ Deadline: Wednesday, October 12, 2016, 23:59}
+\date{}
+\begin{document}
+\maketitle
+\titleformat{\section}[runin]{\large\bfseries}{}{0pt}{\thesection\quad\underline{#1}\vspace{0.1in}\newline}
+\titleformat{\subsection}[runin]{\normalsize\bfseries}{}{0pt}{#1 \thesubsection\newline}
+
+
+\section{Lagrange Multipliers}
+
+In this exercise, we will do optimization problems using Lagrange Multipliers. Suppose we would like to maximize the function
+\begin{align}
+  f(\mathbf{x}) = 1 - x_1^2 - 2x_2^2
+\end{align}
+
+
+{\bf Answer the following questions:}
+
+\begin{enumerate}
+\item Find the maximum of $1 - x_1^2 - 2x_2^2$, subject to the constraint that $x_1+x_2=1$. \\
+	\emph{Solution:} \\
+		Lagrangian:
+			\begin{align*}
+			  	L = 1 - x_1^2 -2x_2^2 + \lambda (x_1 + x_2 - 1)
+			\end{align*}
+		Partial derivatives:
+			\begin{align}
+				\frac{\partial L}{\partial x_1} &= -2x_1 + \lambda = 0 \\
+				\frac{\partial L}{\partial x_2} &= -4x_2 + \lambda = 0 \\
+				\frac{\partial L}{\partial \lambda} &= x_1 + x_2 - 1 = 0
+			\end{align}
+		From 2 and 3 we have: 
+			\begin{align*}
+				x_1 &= 2x_2
+			\end{align*}
+		Substituting in 4:
+			\begin{align*}
+				3x_2 &= 1 \\
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x_1 &= \frac{2}{3} &
+			x_2 &= \frac{1}{3} &
+			\lambda &=  \frac{4}{3}
+			\end{align*}
+
+\item Find the maximum of $1-x_1^2 -x_2^2$ subject to the constraint $x_1+x_2-1\geqslant 0$ \\
+	\emph{Solution:} \\
+		Lagrangian:
+			\begin{align*}
+			L = 1 - x_1^2 - x_2^2 + \lambda (x_1 + x_2 - 1)
+			\end{align*}
+		Partial derivatives:
+			\begin{align}
+			\frac{\partial L}{\partial x_1} &= -2x_1 + \lambda = 0 \\
+			\frac{\partial L}{\partial x_2} &= -2x_2 + \lambda = 0 \\
+			\frac{\partial L}{\partial \lambda} &= x_1 + x_2 - 1 \geqslant 0
+			\end{align}
+		Additional constraints:
+			\begin{align}
+				\lambda &\geqslant 0 \\
+				\lambda (x_1 + x_2 - 1) &= 0
+			\end{align}
+		From 5 and 6 we have: 
+			\begin{align*}
+			x_1 &= x_2 \\
+			x_1 &= \frac{\lambda}{2}
+			\end{align*}
+		Substituting in 9:
+			\begin{align*}
+			2x_2 &= 1
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x_1 &= \frac{1}{2} &
+			x_2 &= \frac{1}{2} &
+			\lambda &=  1
+			\end{align*}
+		Checking the constraints we note that 7 and 8 hold, hence the solution satisfies all the conditions.
+
+\item Find the maximum of $1-x_1^2 -x_2^2$ subject to the constraint $-x_1-x_2+1\geqslant 0$ \\
+	\emph{Solution:} \\
+		Lagrangian:
+			\begin{align*}
+			L = 1 - x_1^2 - x_2^2 + \lambda (-x_1 - x_2 + 1)
+			\end{align*}
+		Partial derivatives:
+			\begin{align}
+			\frac{\partial L}{\partial x_1} &= -2x_1 - \lambda = 0 \\
+			\frac{\partial L}{\partial x_2} &= -2x_2 - \lambda = 0 \\
+			\frac{\partial L}{\partial \lambda} &= -x_1 - x_2 + 1 \geqslant 0
+			\end{align}
+		Additional constraints:
+			\begin{align}
+			\lambda &\geqslant 0 \\
+			\lambda (-x_1 - x_2 + 1) &= 0
+			\end{align}
+		From 10 and 11 we have: 
+			\begin{align*}
+			x_1 &= x_2 \\
+			x_1 &= - \frac{\lambda}{2}
+			\end{align*}
+		Substituting in 12:
+			\begin{align*}
+			2x_2 &= 1
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x_1 &= \frac{1}{2} &
+			x_2 &= \frac{1}{2} &
+			\lambda &=  -1
+			\end{align*}
+		Checking the constraints we note that 13 does not hold, hence we need to revisit the solution for 12. Choosing the first term this time: 
+			\begin{align*}
+			\lambda &= 0
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x_1 &= 0 &
+			x_2 &= 0 &
+			\lambda &=  0
+			\end{align*}
+		One more check at the constraints shows that 12 and 13 hold, hence the solution satisfies all the conditions.
+
+
+\item Find the maximum of $x_1 + 2x_2 - 2x_3$, subject to the constraint  that $x_1^2+x_2^2+x_3^2 = 1$. \\
+	\emph{Solution:} \\
+		Lagrangian:
+			\begin{align*}
+			L = x_1 + 2x_2 - 2x_3 + \lambda (x_1^2 + x_2^2 + x_3^2 - 1)
+			\end{align*}
+		Partial derivatives:
+			\begin{align}
+			\frac{\partial L}{\partial x_1} &= 1 + 2\lambda x_1 = 0 \\
+			\frac{\partial L}{\partial x_2} &= 2 + 2\lambda x_2 = 0 \\
+			\frac{\partial L}{\partial x_3} &= -2 + 2\lambda x_3 = 0 \\
+			\frac{\partial L}{\partial \lambda} &= x_1^2+x_2^2+x_3^2 - 1 = 0
+			\end{align}
+		From 15, 16 and 17 we have: 
+			\begin{align*}
+			\lambda = - \frac{1}{2x_1} &= - \frac{1}{x_2} = \frac{1}{x_3} \\
+			&\therefore \\
+			x_2 = 2x_1 &, 
+			x_3 = -2x_1
+			\end{align*}
+		Substituting in 18:
+			\begin{align*}
+			x_1^2+ (2x_1)^2+ (-2x_1)^2 - 1 &= 0 \\
+			x_1^2 = \frac{1}{9}
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x_1 &= \frac{1}{3} &
+			x_2 &= \frac{2}{3} &
+			x_3 &= -\frac{2}{3} &
+			\lambda &=  - \frac{3}{2}
+			\end{align*}
+		Or
+			\begin{align*}
+			x_1 &= -\frac{1}{3} &
+			x_2 &= -\frac{2}{3} &
+			x_3 &= \frac{2}{3} &
+			\lambda &=  \frac{3}{2}
+			\end{align*}
+		In order to select the appropriate set of values, we substitute in the original function and choose the maximum:
+			\begin{align}
+			x_1 + 2x_2 - 2x_3 &= \frac{1}{3} + 2(\frac{2}{3}) - 2(-\frac{2}{3}) = \frac{9}{3} = 3 \\
+			x_1 + 2x_2 - 2x_3 &= -\frac{1}{3} + 2(-\frac{2}{3}) - 2(\frac{2}{3}) = -\frac{9}{3} = -3
+			\end{align}
+		Since 19 has the maximum, we select the first set of values.
+
+\item A company manufactures a chemical product out of two ingredients, known as ingredient X and ingredient Y. The number of doses produced, $D$, is given by $6x^{2/3}y^{1/2}$, where $x$ and $y$ are the number of grams of ingredients X and Y respectively. Suppose ingredient X consts {4} euro per gram, and ingredient Y costs 3 euro per gram. Find out the maximum number of doses that can be made if no more than 7000 euro can be spent on the ingredients.\\
+	\emph{Solution:} \\
+		Constraint:
+			\begin{align*}
+				4x + 3y \leqslant 7000
+			\end{align*}
+		Lagrangian:
+			\begin{align*}
+			L = 6x^{2/3}y^{1/2} + \lambda (7000 -4x -3y)
+			\end{align*}
+		Partial derivatives:
+			\begin{align}
+			\frac{\partial L}{\partial x} &= 4x^{-1/3}y^{1/2} - 4\lambda = 0 \\
+			\frac{\partial L}{\partial y} &= 3x^{2/3}y^{-1/2} - 3\lambda = 0 \\
+			\frac{\partial L}{\partial \lambda} &= 7000 -4x -3y \geqslant 0
+			\end{align}
+		Additional constraints:
+			\begin{align}
+			\lambda &\geqslant 0
+			\end{align}
+		From 21 and 22 we have: 
+			\begin{align*}
+			\lambda = x^{-1/3}y^{1/2} &= x^{2/3}y^{-1/2} \\
+			&\therefore \\
+			x &= y
+			\end{align*}
+		Substituting in 23:
+			\begin{align*}
+			7000 &= 7x \\
+			x &= 1000
+			\end{align*}
+		Therefore:
+			\begin{align*}
+			x &= 1000 &
+			y &= 1000 &
+			\lambda &=  1000^{1/6}
+			\end{align*}
+		Checking the constraints we note that 24 holds, hence the solution satisfies all the conditions.
+\end{enumerate}
+
+
+\section{Kernel Outlier Detection}
+Our task is to derive an algorithm that will detect the outliers (in this example there are $2$ of them). To that end, we draw a circle rooted at location $\boldsymbol{a}$ and with radius $R$. All data-cases that fall outside the circle are detected as outliers.
+
+We will now write down the primal program that will find such a circle:
+\begin{align*}
+&\min_{\boldsymbol{a},R,\boldsymbol{\xi}} R^2+C \sum_{i=1}^N \xi_i\\
+s.t.~\forall i : &\| \boldsymbol{x_i} - \boldsymbol{a} \|^2 \le R^2 + \xi_i,~\xi_i \ge 0
+\end{align*}
+
+In words: we want to minimize the radius of the circle subject to the constraint that most data-cases should lay inside it. Outliers are allowed to stay outside but they pay a price proportional their distance from the circle boundary and $C$.
+
+{\bf Answer the following questions:}
+
+\begin{enumerate}
+\item Introduce Lagrange multipliers for the constraints and write down the primal Lagrangian. Use the following notation: $\{\alpha_i\}$ are the Lagrange multipliers for the first constraint and $\{\mu_i\}$ for the second constraint.
+\item Write down all KKT conditions. (Hint: take the derivative w.r.t. $R^2$ instead of $R$).
+\item Identify the complementary slackness conditions. Use these conditions to derive what data-cases (e.g. in Figure \ref{graph}) will have $\alpha_i>0$ (support vectors) and which ones will have $\mu_i>0$.
+\item Derive the dual Lagrangian and specify the dual optimization problem.
+Kernelize the problem, i.e. write the dual program only in terms of kernel entries and Lagrange multipliers.
+\item The dual program will return optimal values for $\{\alpha_i\}$. In terms of these, compute the optimal values for the other dual variables $\{\mu_i\}$.
+
+Then, solve the primal variables $\{\boldsymbol{a},R,\boldsymbol{\xi} \}$ (in that order) in terms of the dual variables $\{\mu_i,\alpha_i\}$. Note that you do not need to know the dual optimization program to solve this question. You only need the KKT conditions. 
+\item Assume we have solved the dual program. We now want to apply it to new test cases. Describe a test in the dual space (i.e. in terms if kernels and Lagrange multipliers) that could serve to detect outliers. (Students who got stuck along the way may describe the test in primal space).
+\item What kind of solution do you expect if we use $C=0$. And what solution if we use $C=\infty$?
+\item Describe geometrically what kind of solutions we may expect if we use a RBF kernel (Gaussian) with very small bandwidth (sigma = small), i.e.~describe how these solutions can be different geometrically (in x-space) from the case with a linear kernel.
+\item Now assume that you are given labels (e.g. y=1 for outlier and y=-1 for ``inlier'').  Change the primal problem to include these labels and turn it into a classification problem similar to the SVM. (You do not have to derive the dual program).
+\end{enumerate}
+
+
+\end{document}
