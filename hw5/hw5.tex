@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[compact,explicit]{titlesec}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\newcommand\ie{\textit{i.e.\ }}
+\newcommand\eg{\textit{e.g.\ }}
+
+
+\newcommand{\cxn}{\hat{\xvec}_{n}}
+\newcommand{\VV}{{\bf \Lambda}}
+\newcommand{\uu}{{\bf u}}
+\newcommand{\phiv}{{\bf \phi}}
+\newcommand{\ynk}{y_{nk}}
+\newcommand{\vv}{\lambda}
+
+
+\input{cdefs}
+\title{Machine Learning 1 - Homework 5}
+
+\author{Monday, October 10, 2016 \\ Deadline: Wednesday, October 19, 2016, 23:59}
+\date{}
+\begin{document}
+\maketitle
+\titleformat{\section}[runin]{\large\bfseries}{}{0pt}{\thesection\quad\underline{#1}\vspace{0.1in}\newline}
+\titleformat{\subsection}[runin]{\normalsize\bfseries}{}{0pt}{#1 \thesubsection\newline}
+
+
+
+\section{PCA} 
+Suppose we have a dataset of $N$ vectors $\{\xvecn\}$ of dimension $D$.  We can write the entire dataset as a $D$ by $N$ matrix $\Xmat$ (column $n$ is $\xn$). We may wish to perform PCA on this data in the original data space, or in {\em kernel}-space using kernel-PCA.  In the latter case, the data are projected into {\em feature} space $\phivec$, such that $\phivecn = \phivec(\xvecn)$ is $M$-dimensional feature space representation of $\xn$.  Consider the procedure for PCA (which can be generalized to kernel-PCA):
+\begin{itemize}
+	\item[{\bf Step 1}] Center $\Xmat$, producing a center data matrix $\hat{\Xmat}$. 
+	\item[{\bf Step 2}] Compute sample covariance $\Smat$ of the centered dataset. 
+	\item[{\bf Step 3}] Solve the eigen-value problem $\Smat = \Umat\VV\Umat^T$, where $\Umat$ is a column matrix of eigen-vectors and $\VV$ is a diagonal matrix of eigen-values $\lambda_k$, ie $\VV_{kl} = \vv_k \delta_{kl}$, where $\delta_{kl}=1$ iff $k=l$.
+	\item[{\bf Step 4}] Pick eigen-vectors with largest eigen-values $\{\uu_1, \ldots \uu_K\}$.
+	\item[{\bf Step 5}] Project data onto $K$-dimensional manifold.
+\end{itemize}
+
+\noindent Answer the following questions:
+\begin{enumerate}
+	\item[(a)] Provide an expression for $\cxn$. 
+	\item[(b)] Prove that the average of $\cxn$ (over $N$ data vectors) is the $0$ vector.
+	\item[(c)] Provide an expression for $\Smat$ in terms of $\hat{\Xmat}$. 
+	\item[(d)] What is the dimensionality of $\Smat$? 
+	\item[(e)] What is the expression for the linear projection $\Lmat$ that maps data vectors $\cxn$ onto a $K$-dimensional sub-space, $\yn = \Lmat \cxn$, such that it has zero mean and identity covariance.  Prove that the average over $N$ of $\yn$ is $0$.  Prove that the covariance of $\yn$ is the identity.  What is this operation called? 
+	
+\end{enumerate}
+
+\section{Mixture Models}
+
+Consider a data distribution whose underlying generating process is a mixture of Poisson distributions, but we do not know the parameters of the mixture model. In this question you are asked to derive the update equations for the general Poisson mixture model.
+
+The Poisson distribution is:
+\begin{equation}
+	P( x | \lambda ) = \frac{1}{x!} \lambda^{x} \exp(-\lambda) \nonumber
+\end{equation}
+where $x = 0, 1, 2, ...$ (non-negative integers), $\lambda > 0$ is the `rate' of the data; the expected value of $x$ is $\lambda$.  A mixture representation assumes the following:
+\begin{equation}
+	P( x_n ) = \sum_{k=1}^K \pi_k P( x_n | \lambda_k ) \nonumber
+\end{equation}
+where $P( x_n | \lambda_k )$ is a Poisson distribution with rate $\lambda_k$ and $x_n$ is a single data observation.  To answer the following questions assume we are given a dataset $\{x_1, x_2, \ldots, x_N\}$.  Make sure that the constraint $\sum_k \pi_k = 1$ is satisfied (i.e. think of the log-likelihood or log-joint as $f$ (an objective to maximize) and $\sum_k \pi_k - 1 = 0$ as $g=0$ (a constraint that must hold)). 
+
+\newcommand{\x}{\xvec}
+\begin{enumerate}
+	\item[(a)] Write down the likelihood (as usual) for the data set in terms of $\{x_1, x_2, \ldots, x_N\}$, $\{\pi_k\}$, $\{\lambda_k\}$.
+	\item[(b)] Write down the log-likelihood (as usual) for the data set in terms of $\{x_1, x_2, \ldots, x_N\}$, $\{\pi_k\}$, $\{\lambda_k\}$.
+	\item[(c)] Find the expression for the responsibilities $r_{nk}$.
+	\item[(d)] Find the expression for $\lambda_k$ that maximizes the log-likelihood. 
+	\item[(e)] Find the expression for $\pi_k$ that maximizes the log-likelihood. 
+  \item[(f)] Now assume priors for $\pi_k$ and $\lambda_k$.  $p(\lambda_k | a, b ) = \mathcal{G}(\lambda_k | a,b )$ (a Gamma prior) and $p(\pi_1, \ldots, \pi_k) = \mathcal{D}(\pi_1, \ldots, \pi_k | \alpha/K, \ldots, \alpha/K)$ (a Dirchlet distribution).  These distributions are defined in the appendix of Bishop.  Write down the log-joint distribution \\$\log p(\x_1, \ldots, \x_N, \{\pi_k\}, \{\lambda_k\} | a, b, \alpha, K)$.
+	\item[(g)] Find the expression for $\lambda_k$ that maximizes the log-joint. 
+	\item[(h)] Find the expression for $\pi_k$ that maximizes the log-joint.
+	\item[(i)] Write down an iterative algorithm using the above update equations (similar to the ones derived in class for the Mixture of Gaussians); include initialization and convergence check steps.
+\end{enumerate}
+
+\end{document}
