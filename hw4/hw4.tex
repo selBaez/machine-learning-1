@@ -509,8 +509,8 @@ Then, solve the primal variables $\{\boldsymbol{a},R,\boldsymbol{\xi} \}$ (in th
 \text{Expand:} \\
 &\||\xvec^* - \sum_i^N \alpha_i \xvec_i||^2 > R^2 \\
 \text{Norm identity:} \\
-&(\xvec^* - \sum_i^N \alpha_i \xvec_i)^T(\xvec^* - \sum_i^N \alpha_i \xvec_i) > R \\
-&{\xvec^*}^T\xvec^* + \sum_{i,j}^N \alpha_i \alpha_j \xvec_i^T \xvec_j - 2 {\xvec^*}^T \sum_i^N \alpha_i \xvec_i > R \\
+&(\xvec^* - \sum_i^N \alpha_i \xvec_i)^T(\xvec^* - \sum_i^N \alpha_i \xvec_i) > R^2 \\
+&{\xvec^*}^T\xvec^* + \sum_{i,j}^N \alpha_i \alpha_j \xvec_i^T \xvec_j - 2 {\xvec^*}^T \sum_i^N \alpha_i \xvec_i > R^2 \\
 &\text{If } K(\xvec^*, \xvec^*) + \sum_{i,j}^N \alpha_i \alpha_j K(\xvec_i, \xvec_j) - 2 \sum_i^N \alpha_i K(\xvec^*, \xvec_i) > R^2 \\
 &\text{  then the point is an outlier} \\
 \end{align*}
