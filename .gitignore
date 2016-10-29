@@ -4,3 +4,4 @@
 *.blg
 *.synctex.gz
 mnist.pkl.gz
+*checkpoint.ipynb
